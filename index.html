@@ -6,6 +6,7 @@
 <title>r/MuseAi — Where creators and AI compose together</title>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="alternate icon" href="assets/favicon.svg">
+<script src="assets/theme.js"></script>
 <meta name="theme-color" content="#4c1d95">
 <meta name="description" content="MuseAi community — prompts, creations, workflows, model updates, and helpful humans.">
 
@@ -40,7 +41,7 @@
     --radius-sm:10px;
     color-scheme:light;
   }
-  body.dark{
+  body.dark,html.theme-dark body{
     --bg:#0b0f14;
     --card:#161b22;
     --border:#232a33;
@@ -2050,9 +2051,7 @@ createInput.addEventListener('keydown', (e) => {
 /* --- Theme toggle --- */
 const themeToggle = document.getElementById('themeToggle');
 themeToggle.addEventListener('click', () => {
-  const dark = document.body.classList.toggle('dark');
-  themeToggle.textContent = dark ? '☀️' : '🌙';
-  toast(dark ? 'Dark mode on' : 'Light mode on');
+  setTimeout(() => toast(document.documentElement.classList.contains('theme-dark') ? 'Dark mode on' : 'Light mode on'), 0);
 });
 
 /* --- Dismiss announcement --- */
@@ -2583,6 +2582,8 @@ renderFeed();
     try{
       const {data:{session}}=await supabaseClient.auth.getSession();
       if(session)await activateUser(session.user);
+      const authMode=new URLSearchParams(window.location.search).get('auth');
+      if(!session && authMode==='signup')setTimeout(()=>openLogin(true),0);
     }catch(error){console.error('Session check error:',error);}
   })();
 })();
