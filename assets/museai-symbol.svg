@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="MuseAi spark symbol">
+  <defs><linearGradient id="g" x1="20" y1="20" x2="140" y2="140"><stop stop-color="#ff9d00"/><stop offset=".5" stop-color="#ff3d00"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs>
+  <circle cx="80" cy="80" r="72" fill="#171334"/>
+  <path d="M80 18l11 51 51 11-51 11-11 51-11-51-51-11 51-11 11-51z" fill="url(#g)"/>
+  <circle cx="80" cy="80" r="13" fill="#fff7e6"/>
+</svg>
