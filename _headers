@@ -1,0 +1,9 @@
+/*
+  Cache static assets and keep the site embeddable on static hosts.
+  Cloudflare Pages reads this file automatically.
+*/
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.html
+  Cache-Control: public, max-age=3600

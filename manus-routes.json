@@ -1,0 +1,116 @@
+{
+  "routes": [
+    {
+      "path": "/404.html",
+      "title": "404"
+    },
+    {
+      "path": "/about.html",
+      "title": "About"
+    },
+    {
+      "path": "/assets.html",
+      "title": "Assets"
+    },
+    {
+      "path": "/community.html",
+      "title": "Community"
+    },
+    {
+      "path": "/doc-glossary.html",
+      "title": "Doc Glossary"
+    },
+    {
+      "path": "/doc-how-a-cron-runs.html",
+      "title": "Doc How A Cron Runs"
+    },
+    {
+      "path": "/doc-vm-overview.html",
+      "title": "Doc Vm Overview"
+    },
+    {
+      "path": "/docs.html",
+      "title": "Docs"
+    },
+    {
+      "path": "/index.html",
+      "title": "Index"
+    },
+    {
+      "path": "/invite.html",
+      "title": "Invite"
+    },
+    {
+      "path": "/lesson-01-cron.html",
+      "title": "Lesson 01 Cron"
+    },
+    {
+      "path": "/lesson-02-job.html",
+      "title": "Lesson 02 Job"
+    },
+    {
+      "path": "/lesson-03-worker.html",
+      "title": "Lesson 03 Worker"
+    },
+    {
+      "path": "/lesson-04-lane.html",
+      "title": "Lesson 04 Lane"
+    },
+    {
+      "path": "/lesson-05-run.html",
+      "title": "Lesson 05 Run"
+    },
+    {
+      "path": "/lesson-06-handoff.html",
+      "title": "Lesson 06 Handoff"
+    },
+    {
+      "path": "/lesson-07-subagent.html",
+      "title": "Lesson 07 Subagent"
+    },
+    {
+      "path": "/lesson-08-memory.html",
+      "title": "Lesson 08 Memory"
+    },
+    {
+      "path": "/lesson-09-skills-connectors.html",
+      "title": "Lesson 09 Skills Connectors"
+    },
+    {
+      "path": "/lesson-10-the-browser.html",
+      "title": "Lesson 10 The Browser"
+    },
+    {
+      "path": "/lesson-11-the-vm-machine.html",
+      "title": "Lesson 11 The Vm Machine"
+    },
+    {
+      "path": "/lesson-12-reboots-lane-deaths.html",
+      "title": "Lesson 12 Reboots Lane Deaths"
+    },
+    {
+      "path": "/lesson-13-verification.html",
+      "title": "Lesson 13 Verification"
+    },
+    {
+      "path": "/lesson-14-posting-rules.html",
+      "title": "Lesson 14 Posting Rules"
+    },
+    {
+      "path": "/lessons.html",
+      "title": "Lessons"
+    },
+    {
+      "path": "/private-communities.html",
+      "title": "Private Communities"
+    },
+    {
+      "path": "/sponsor-gitfed.html",
+      "title": "Sponsor Gitfed"
+    },
+    {
+      "path": "/support.html",
+      "title": "Support"
+    }
+  ]
+}
