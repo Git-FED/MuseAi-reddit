@@ -1688,15 +1688,15 @@
     <div class="spacer"></div>
     <div class="stat-inline">
       <div>
-        <div class="num" id="memberCount" aria-live="polite" title="Profiles plus distinct people who joined or took a community action">—</div>
+        <div class="num" id="memberCount" aria-live="polite" title="People who clicked Join or signed up">—</div>
         <div class="lbl">Members</div>
       </div>
       <div>
-        <div class="num" id="onlineCount" title="Unique visitors active on this page within the last hour">—</div>
+        <div class="num" id="onlineCount" title="People who interacted with this page within the last hour">—</div>
         <div class="lbl">Online</div>
       </div>
-      <div id="subscriberMetric" hidden>
-        <div class="num" id="subscriberCount" aria-live="polite" title="Number of member profiles">—</div>
+      <div id="subscriberMetric">
+        <div class="num" id="subscriberCount" aria-live="polite" title="Distinct people who have published a post">—</div>
         <div class="lbl">Subscribers</div>
       </div>
     </div>
@@ -1815,15 +1815,15 @@
 
           <div class="about-stats">
             <div>
-              <div class="num" id="sidebarMemberCount" aria-live="polite" title="Profiles plus distinct people who joined or took a community action">—</div>
+              <div class="num" id="sidebarMemberCount" aria-live="polite" title="People who clicked Join or signed up">—</div>
               <div class="lbl">Members</div>
             </div>
             <div>
-              <div class="num" id="sidebarOnline" title="Unique visitors active on this page within the last hour">—</div>
+              <div class="num" id="sidebarOnline" title="People who interacted with this page within the last hour">—</div>
               <div class="lbl">Online</div>
             </div>
-            <div id="sidebarSubscriberMetric" hidden>
-              <div class="num" id="sidebarSubscriberCount" aria-live="polite" title="Number of member profiles">—</div>
+            <div id="sidebarSubscriberMetric">
+              <div class="num" id="sidebarSubscriberCount" aria-live="polite" title="Distinct people who have published a post">—</div>
               <div class="lbl">Subscribers</div>
             </div>
           </div>
@@ -2311,6 +2311,7 @@ function renderPost(p){
 
         <div class="post-actions">
           <button class="action" data-comments-toggle aria-expanded="${isCommentsOpen}"><span class="ico">💬</span>${p.comments == null ? '—' : p.comments} Comments</button>
+          <span class="action post-views" title="Times this post was opened"><span class="ico">👁</span>${Number(p.views) || 0} Views</span>
           <a class="action" data-share href="share.html?id=${encodeURIComponent(p.id)}"><span class="ico">↗</span>Share</a>
           <button class="action ${saved ? 'saved' : ''}" data-save aria-pressed="${saved}">
             <span class="ico">${saved ? '★' : '☆'}</span>${saved ? 'Saved' : 'Save'}
@@ -2441,6 +2442,16 @@ document.getElementById('feed').addEventListener('click', (e) => {
     openLightbox(postImages(post), Number(lightboxBtn.dataset.lightbox) || 0);
     return;
   }
+  const postLink = e.target.closest('.post-title');
+  if (postLink){
+    e.preventDefault();
+    const postId = postLink.closest('.post')?.dataset.id;
+    const destination = postLink.href;
+    Promise.resolve(window.museCommunity?.recordPostView(postId))
+      .catch(error => console.warn('Could not record post view:', error))
+      .finally(() => { window.location.href = destination; });
+    return;
+  }
   const voteBtn = e.target.closest('[data-vote]');
   if (voteBtn){
     e.preventDefault();
@@ -2520,6 +2531,7 @@ document.getElementById('chips').addEventListener('click', (e) => {
 /* --- Join button --- */
 const joinBtn = document.getElementById('joinBtn');
 joinBtn.addEventListener('click', () => {
+  try{localStorage.setItem('museai-community-member-v1','1');}catch(_error){}
   window.museCommunity?.recordActivity(true);
 });
 
@@ -2573,6 +2585,7 @@ renderFeed();
   let activationPromise = null;
   let postTableNoticeShown = false;
   const VISITOR_STORAGE_KEY = 'museai-community-visitor-id';
+  const LOCAL_MEMBER_STORAGE_KEY = 'museai-community-member-v1';
   function makeVisitorId(){
     try{
       let id=localStorage.getItem(VISITOR_STORAGE_KEY);
@@ -2585,6 +2598,12 @@ renderFeed();
     }
   }
   const visitorId=makeVisitorId();
+  function markLocalMember(){
+    try{localStorage.setItem(LOCAL_MEMBER_STORAGE_KEY,'1');}catch(_error){}
+  }
+  function hasLocalMember(){
+    try{return localStorage.getItem(LOCAL_MEMBER_STORAGE_KEY)==='1';}catch(_error){return false;}
+  }
   let lastPresenceWrite=0;
   let lastCountsRefresh=0;
   let presenceWarningShown=false;
@@ -2659,6 +2678,13 @@ renderFeed();
     if(!error && (memberAction || Date.now()-lastCountsRefresh>20000)) refreshCommunityCounts();
   }
 
+  async function recordPostView(postId){
+    if(!postId)return null;
+    const {data,error}=await supabaseClient.rpc('increment_museai_post_view',{p_post_id:postId});
+    if(error)throw error;
+    return Array.isArray(data) ? data[0] : data;
+  }
+
   function syncBodyLock(){
     const active = loginModal.classList.contains('active') || profileModal.classList.contains('active') || composerModal.classList.contains('active');
     document.body.style.overflow = active ? 'hidden' : '';
@@ -2686,8 +2712,7 @@ renderFeed();
   function updateHeader(){
     const signedIn = !!currentUser;
     headerAvatar.hidden = !signedIn;
-    document.getElementById('subscriberMetric').hidden=!signedIn;
-    document.getElementById('sidebarSubscriberMetric').hidden=!signedIn;
+    // Subscriber counts are public: they reflect distinct people who have posted.
     if (composerAvatar) composerAvatar.hidden = !signedIn;
     if (currentUser){
       loginLink.style.display='none';
@@ -3080,7 +3105,7 @@ renderFeed();
       };
       const {data, error} = await supabaseClient.from('museai_posts').insert(payload).select(POST_FIELDS).single();
       if (error) throw error;
-      await recordActivity(true);
+      await recordActivity(false);
       const post = mapRows([data], {[currentProfile.id]:currentProfile})[0];
       state.posts.unshift(post);
       state.filter = 'all';
@@ -3245,7 +3270,7 @@ renderFeed();
         id:row.id,author_id:row.author_id,author:(authorProfile&&authorProfile.username)||'member',
         title:row.title||'Untitled post',body:row.body||'',ageHours:Math.max(0,Math.floor((now-Date.parse(createdAt))/3600000)),
         created_at:createdAt,score:Number.isFinite(score)?score:null,
-        comments:Number.isFinite(comments)?comments:null,flair:row.flair||'discussion',
+        comments:Number.isFinite(comments)?comments:null,views:Math.max(0,Number(row.view_count)||0),flair:row.flair||'discussion',
         thumb:String(row.thumb||'✨').slice(0,16),thumbBg:/^#[0-9a-f]{3,8}$/i.test(String(row.thumb_bg||''))?row.thumb_bg:'#ede9fe',myVote:Number(viewerVotes[row.id])||0,
         attachments:normalizeAttachments(row.attachments)
       };
@@ -3279,12 +3304,13 @@ renderFeed();
         const value=values[key];
         el.textContent=value===null||value===undefined?'—':Number(value).toLocaleString('en-US');
       }));
-      const subscriberVisible=!!currentUser && counts.subscriber_count!==null && counts.subscriber_count!==undefined;
-      document.getElementById('subscriberMetric').hidden=!subscriberVisible;
-      document.getElementById('sidebarSubscriberMetric').hidden=!subscriberVisible;
+      document.getElementById('subscriberMetric').hidden=false;
+      document.getElementById('sidebarSubscriberMetric').hidden=false;
     }catch(error){
       console.warn('Community counts are unavailable:',error.message||error);
-      [...ids.members,...ids.online,...ids.subscribers].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
+      const localMemberValue=hasLocalMember()?'1':'0';
+      ids.members.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=localMemberValue;});
+      [...ids.online,...ids.subscribers].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
     }
   }
   async function loadPostComments(postId){
@@ -3389,7 +3415,7 @@ renderFeed();
   function activateUser(user){
     if(!user)return Promise.resolve();
     currentUser=user; updateHeader();
-    recordActivity(true);
+    recordActivity(false);
     if(activationUserId===user.id && activationPromise) return activationPromise;
     activationUserId=user.id;
     activationPromise=(async()=>{
@@ -3416,6 +3442,7 @@ renderFeed();
     openLogin:()=>openLogin(false),
     openComposer,
     recordActivity,
+    recordPostView,
     vote:votePost,
     loadComments:loadPostComments,
     addComment,
@@ -3531,6 +3558,7 @@ renderFeed();
         const {data,error}=await supabaseClient.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin+window.location.pathname}});
         if(error)throw error;
         if(data.user&&data.user.identities&&data.user.identities.length===0){showAuthMessage('This email is already registered. Please sign in.');return;}
+        markLocalMember();
         await recordActivity(true);
         if(!data.session){showAuthMessage('Please check your email to confirm your account.','info');}
         else{closeLogin();showAuthMessage('Account created.','success');await activateUser(data.user);}

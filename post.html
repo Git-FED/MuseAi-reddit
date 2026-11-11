@@ -224,7 +224,9 @@ html.theme-dark .post-file-icon{background:#2b2140;color:#c4b5fd}
     score.textContent = '▲ ' + (Number(post.score) || 0);
     const comments = document.createElement('span');
     comments.textContent = '💬 ' + (Number(post.comments) || 0);
-    metaEl.append(flair, author, time, score, comments);
+    const views = document.createElement('span');
+    views.textContent = '👁 ' + (Number(post.view_count) || 0);
+    metaEl.append(flair, author, time, score, comments, views);
     titleEl.textContent = String(post.title || 'Untitled post');
     bodyEl.textContent = String(post.body || '');
     bodyEl.hidden = !post.body;

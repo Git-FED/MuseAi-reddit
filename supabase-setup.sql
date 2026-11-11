@@ -30,6 +30,12 @@ create table if not exists public.museai_posts (
   comments integer not null default 0,
   created_at timestamptz not null default now()
 );
+alter table public.museai_posts
+  add column if not exists view_count integer not null default 0;
+alter table public.museai_posts
+  drop constraint if exists museai_posts_view_count_nonnegative;
+alter table public.museai_posts
+  add constraint museai_posts_view_count_nonnegative check (view_count >= 0);
 
 create index if not exists museai_posts_created_at_idx
   on public.museai_posts (created_at desc);
@@ -58,9 +64,30 @@ create policy "museai_posts_delete_own"
 grant select on public.museai_posts to anon, authenticated;
 grant insert, update, delete on public.museai_posts to authenticated;
 
+-- A post view is recorded only when the frontend explicitly opens a post.
+create or replace function public.increment_museai_post_view(p_post_id uuid)
+returns integer
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_view_count integer;
+begin
+  update public.museai_posts
+  set view_count = view_count + 1
+  where id = p_post_id
+  returning view_count into v_view_count;
+  if v_view_count is null then raise exception 'Post not found'; end if;
+  return v_view_count;
+end;
+$$;
+revoke all on function public.increment_museai_post_view(uuid) from public, anon, authenticated;
+grant execute on function public.increment_museai_post_view(uuid) to anon, authenticated;
+
 -- Activity-derived counts. The page stores a random browser ID, not personal details.
--- Members include existing profiles plus distinct anonymous or signed-in action takers.
--- Subscribers are the profile count and are returned only to authenticated sessions.
+-- Members are explicit Join or Sign Up actions.
+-- Subscribers are distinct people who have published at least one post.
 create table if not exists public.museai_visitor_presence (
   visitor_id uuid primary key,
   last_active_at timestamptz not null default now(),
@@ -150,17 +177,13 @@ as $$
       where presence.last_active_at >= now() - interval '1 hour'
     ) as online_count,
     (
-      (select count(*) from public.profiles)
-      +
-      (select count(*)
-       from public.museai_member_actions as action
-       where action.user_id is null
-          or not exists (select 1 from public.profiles as profile where profile.id = action.user_id))
+      select count(*)
+      from public.museai_member_actions as action
     ) as member_count,
-    case when auth.uid() is not null
-      then (select count(*) from public.profiles)
-      else null::bigint
-    end as subscriber_count;
+    (
+      select count(distinct post.author_id)
+      from public.museai_posts as post
+    ) as subscriber_count;
 $$;
 
 revoke all on function public.record_museai_activity(uuid, boolean) from public, anon, authenticated;
@@ -239,7 +262,7 @@ begin
   perform 1 from public.museai_posts where id = p_post_id for update;
   if not found then raise exception 'Post not found'; end if;
 
-  perform public.record_museai_activity(p_visitor_id, true);
+  perform public.record_museai_activity(p_visitor_id, false);
   v_actor_key := case when v_user_id is null
     then 'visitor:' || p_visitor_id::text
     else 'user:' || v_user_id::text end;
@@ -338,7 +361,7 @@ begin
   set comments = coalesce(post.comments, 0) + 1
   where post.id = p_post_id;
 
-  perform public.record_museai_activity(p_visitor_id, true);
+  perform public.record_museai_activity(p_visitor_id, false);
   return v_comment_id;
 end;
 $$;

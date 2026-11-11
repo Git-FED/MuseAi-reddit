@@ -74,6 +74,19 @@ python3 -m http.server 8080
 
 For live community behavior, run [`supabase-setup.sql`](supabase-setup.sql) in the configured Supabase SQL editor first. The SQL expects an existing `public.profiles` table. Without Supabase setup, the visual pages still render, but live posts, profiles, votes, comments, presence, and counts will not be available.
 
+### Community count definitions
+
+The homepage metrics have distinct meanings:
+
+- **Members** are people who explicitly clicked **Join** or completed **Sign Up**. The browser stores that local membership marker, and the RPC stores the aggregate action count.
+- **Online** is the number of distinct visitors who interacted with the page within the last hour.
+- **Subscribers** are distinct people who have published at least one post. This is currently the admin account in the demo data.
+
+For an existing Supabase installation, run [`supabase-community-counts-upgrade.sql`](supabase-community-counts-upgrade.sql) once after the base setup to replace the older count definitions.
+
+### Post view counts
+Every post has a durable `view_count` that starts at **0**. It increments only when a visitor clicks the post title to open the full post view; feed loads, scrolling, votes, comments, and image lightbox opens do not increment it. For an existing database, run [`supabase-post-views-upgrade.sql`](supabase-post-views-upgrade.sql) once.
+
 ### Enable images and files
 
 Run [`supabase-media-upgrade.sql`](supabase-media-upgrade.sql) after `supabase-setup.sql`. It adds the `attachments` column to posts and creates the public `museai-media` storage bucket with per-user upload, update, and delete policies. Both scripts are safe to re-run.
@@ -120,6 +133,8 @@ There is currently no automated test command. The bundle is plain HTML/CSS/JS an
 | [`status.html`](status.html) | Static status page surface |
 | [`404.html`](404.html) | Static-hosting fallback page |
 | [`supabase-setup.sql`](supabase-setup.sql) | Database schema, RLS policies, and RPC functions |
+| [`supabase-community-counts-upgrade.sql`](supabase-community-counts-upgrade.sql) | Revised Members, Online, and Subscribers RPC definitions |
+| [`supabase-post-views-upgrade.sql`](supabase-post-views-upgrade.sql) | Post view counter column and increment RPC |
 | [`supabase-media-upgrade.sql`](supabase-media-upgrade.sql) | Post attachments column and media storage bucket policies |
 
 ## Visual asset gallery
@@ -164,13 +179,18 @@ The project does not include a `wrangler.toml`, so deployment configuration stil
 
 Run [`supabase-setup.sql`](supabase-setup.sql) in Supabase before expecting the community database features to work. The frontend uses the configured publishable Supabase client key and calls the included RPC functions for:
 
-- Community presence and counts.
+- Community presence and counts: Members count explicit Join/Sign Up actions, Online counts the rolling one-hour interaction window, and Subscribers count distinct post authors.
+- Post view counts increment only when the frontend opens a post through its title link.
 - Anonymous and authenticated activity identity merging.
 - Durable votes and viewer vote state.
 - Comment creation.
 - Public post and comment reads.
 
 For image and file posts, also run [`supabase-media-upgrade.sql`](supabase-media-upgrade.sql) to add the `attachments` column and create the public `museai-media` storage bucket. The bucket allows public reads and limits writes to each signed-in member's own folder.
+
+For an existing database, also run [`supabase-community-counts-upgrade.sql`](supabase-community-counts-upgrade.sql) to apply the revised metric definitions.
+
+For post views, also run [`supabase-post-views-upgrade.sql`](supabase-post-views-upgrade.sql) to add the counter and its public increment RPC.
 
 Review the existing `public.profiles` schema and production RLS permissions before launch.
 
@@ -187,6 +207,8 @@ The support age screen and private-community eligibility flow are lightweight cl
 - No live demo URL is currently configured.
 - The feed needs the included Supabase SQL setup and a compatible existing profiles table for live database behavior.
 - Media posts need the separate `supabase-media-upgrade.sql` migration and the `museai-media` storage bucket.
+- Existing installations need the separate `supabase-community-counts-upgrade.sql` migration for the revised metric definitions.
+- Existing installations need the separate `supabase-post-views-upgrade.sql` migration for durable post view counts.
 - External payment, Discord, social, and media links depend on third-party availability.
 
 ## License
