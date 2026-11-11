@@ -1,2 +1,269 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Post view — MuseAi</title><link rel="icon" type="image/svg+xml" href="assets/favicon.svg"><link rel="stylesheet" href="assets/site-pages.css">
-<script src="assets/theme.js"></script></head><body><header class="site-top"><div class="wrap nav"><a class="brand" href="index.html"><img src="assets/museai-symbol.svg" alt="MuseAi symbol"> <span>MuseAi community</span></a><nav class="navlinks" aria-label="Page navigation"><a href="index.html">Home</a><a href="promotions.html">Promos</a><a href="docs.html">Docs</a><a href="support.html">Support</a><button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button></nav></div></header><main><section class="section"><div class="wrap"><div class="panel"><span class="eyebrow">Post view</span><h1>Open this conversation in the community.</h1><p id="postId">Post link received.</p><a class="button" href="index.html">Return to feed</a></div></div></section><script>const id=new URLSearchParams(location.search).get('id');if(id)document.getElementById('postId').textContent='Post ID: '+id;</script></main><footer class="site-footer"><div class="wrap site-footer-inner"><div class="footer-topline"><a class="footer-brand" href="https://www.fedpromptly.org" target="_blank" rel="noopener noreferrer"><img src="assets/museai-symbol.svg" alt="FED-OS symbol"><span><strong>FED-OS</strong><small>Explore the creative ecosystem.</small></span></a><a class="button" href="support.html">Support the spark ↗</a></div><div class="footer-columns"><section class="footer-col"><h3>FED-OS</h3><div class="footer-links"><a href="https://www.fedpromptly.org" target="_blank" rel="noopener noreferrer">Ecosystem</a><a href="https://www.fedpromptly.com/aid" target="_blank" rel="noopener noreferrer">Membership</a><a href="https://www.jabburr.com/fed-os" target="_blank" rel="noopener noreferrer">Storefront</a><a href="https://whop.com/fedpromptly/" target="_blank" rel="noopener noreferrer">Whop</a></div></section><section class="footer-col"><h3>Support & media</h3><div class="footer-links"><a href="https://www.patreon.com/c/FEDpromptly" target="_blank" rel="noopener noreferrer">Patreon</a><a href="https://buymeacoffee.com/fedpromptly" target="_blank" rel="noopener noreferrer">Tips</a><a href="https://substack.com/@fedpromptly" target="_blank" rel="noopener noreferrer">Articles</a><a href="https://fedpromptly.wordpress.com/" target="_blank" rel="noopener noreferrer">Blog</a><a href="https://gitfed.substack.com/" target="_blank" rel="noopener noreferrer">GitFed Blog</a><a href="https://www.deviantart.com/fedpromptly" target="_blank" rel="noopener noreferrer">Artwork</a><a href="https://bsky.app/profile/fed-os.bsky.social" target="_blank" rel="noopener noreferrer">Bluesky</a><a href="https://x.com/Fedpromptly" target="_blank" rel="noopener noreferrer">X / Ads</a></div></section><section class="footer-col"><h3>Contact</h3><a class="footer-email" href="mailto:contact@fedpromptly.com">General · contact@fedpromptly.com</a><a class="footer-email" href="mailto:support@fedpromptly.com">Support · support@fedpromptly.com</a><a class="footer-email" href="mailto:business@fedpromptly.com">Business · business@fedpromptly.com</a><a class="footer-email" href="mailto:careers@fedpromptly.com">Careers · careers@fedpromptly.com</a><div class="footer-links" style="margin-top:10px"><a href="discord.html">Developers Discord</a><a href="private-communities.html">Private Communities</a></div></section></div><div class="footer-bottom"><span>✦ Public links stay public. Restricted rooms stay gated.</span><span><a href="privacy.html">Privacy</a> · <a href="content-policy.html">Content policy</a> · <a href="index.html">Home</a></span></div></div></footer></body></html>
+<script src="assets/theme.js"></script><style>
+.post-view{max-width:900px;margin:0 auto}
+.post-back{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:13px;color:var(--violet);text-decoration:none;margin-bottom:18px}
+.post-back:hover{text-decoration:underline}
+.post-status{padding:18px 0;color:var(--muted)}
+.post-status[hidden]{display:none!important}
+.post-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:13px;margin-bottom:12px}
+.post-flair{display:inline-flex;padding:5px 9px;border-radius:999px;background:#ede9fe;color:#6d28d9;font-weight:900;font-size:11px;letter-spacing:.3px;text-transform:uppercase}
+.post-author{font-weight:800;color:var(--violet);text-decoration:none}
+.post-author:hover{text-decoration:underline}
+.post-view h1{margin:0 0 14px;font-size:clamp(28px,3.6vw,40px);line-height:1.14;letter-spacing:-1.2px}
+.post-body{white-space:pre-wrap;overflow-wrap:anywhere;font-size:17px;line-height:1.75;color:inherit;margin:18px 0 0}
+.post-media{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:20px}
+.post-media.single{grid-template-columns:1fr}
+.post-media-item{padding:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0b0f14;cursor:zoom-in;display:block;width:100%;line-height:0;aspect-ratio:4/3}
+.post-media-item:focus-visible{outline:3px solid var(--violet);outline-offset:2px}
+.post-media-item img{display:block;width:100%;height:100%;max-height:none;object-fit:contain;background:#0b0f14}
+.post-media.single .post-media-item{aspect-ratio:auto}
+.post-media.single .post-media-item img{object-fit:contain;max-height:70vh}
+.post-files{display:grid;gap:8px;margin-top:14px}
+.post-file{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;text-decoration:none;background:#fff;color:var(--ink);transition:border-color .18s,transform .18s}
+.post-file:hover{border-color:var(--violet);transform:translateY(-1px)}
+.post-file-icon{flex:0 0 auto;display:grid;place-items:center;min-width:44px;height:44px;padding:0 7px;border-radius:11px;background:#ede9fe;color:#6d28d9;font-size:10px;font-weight:900;letter-spacing:.4px}
+.post-file-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}
+.post-file-name{font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post-file-meta{font-size:12px;color:var(--muted)}
+.post-file-download{flex:0 0 auto;font-weight:900;font-size:12px;color:var(--violet)}
+.post-lightbox{position:fixed;inset:0;z-index:100;background:rgba(5,8,12,.96);display:flex;align-items:center;justify-content:center;padding:24px}
+.post-lightbox[hidden]{display:none!important}
+.post-lightbox img{max-width:min(1200px,94vw);max-height:90vh;border-radius:12px;object-fit:contain;background:#111}
+.post-lightbox-close{position:absolute;top:16px;right:16px;width:42px;height:42px;border:1px solid rgba(255,255,255,.3);border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:24px;line-height:1;cursor:pointer}
+.post-lightbox-close:hover{background:rgba(255,255,255,.22)}
+body.post-lightbox-open{overflow:hidden}
+html.theme-dark .post-file{background:#161b22;border-color:#2f3945;color:#e6edf3}
+html.theme-dark .post-file:hover{border-color:#a78bfa}
+html.theme-dark .post-flair{background:#2b2140;color:#c4b5fd}
+html.theme-dark .post-file-icon{background:#2b2140;color:#c4b5fd}
+@media(max-width:640px){.post-media{grid-template-columns:1fr}.post-view h1{font-size:30px;letter-spacing:-1px}.post-file-download{display:none}}
+</style>
+</head><body><header class="site-top"><div class="wrap nav"><a class="brand" href="index.html"><img src="assets/museai-symbol.svg" alt="MuseAi symbol"> <span>MuseAi community</span></a><nav class="navlinks" aria-label="Page navigation"><a href="index.html">Home</a><a href="promotions.html">Promos</a><a href="docs.html">Docs</a><a href="support.html">Support</a><button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button></nav></div></header><main>
+<section class="section">
+  <div class="wrap">
+    <div class="panel post-view">
+      <a class="post-back" href="index.html">← Back to r/MuseAi</a>
+      <div class="post-status" id="postStatus">Loading post…</div>
+      <article id="postArticle" hidden>
+        <div class="post-meta" id="postMeta"></div>
+        <h1 id="postTitle"></h1>
+        <div class="post-body" id="postBody"></div>
+        <div class="post-media" id="postMedia"></div>
+        <div class="post-files" id="postFiles"></div>
+      </article>
+    </div>
+  </div>
+</section>
+<div class="post-lightbox" id="postLightbox" hidden>
+  <button type="button" class="post-lightbox-close" data-post-lightbox-close aria-label="Close image viewer">×</button>
+  <img id="postLightboxImage" alt="">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  'use strict';
+  const SUPABASE_URL = 'https://qyuczfpgydgqywgthgrz.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_2NLEuDREplLS9DgUXeA8Tw_f8MJOhCq';
+  const statusEl = document.getElementById('postStatus');
+  const article = document.getElementById('postArticle');
+  const metaEl = document.getElementById('postMeta');
+  const titleEl = document.getElementById('postTitle');
+  const bodyEl = document.getElementById('postBody');
+  const mediaEl = document.getElementById('postMedia');
+  const filesEl = document.getElementById('postFiles');
+  const lightbox = document.getElementById('postLightbox');
+  const lightboxImage = document.getElementById('postLightboxImage');
+  const postId = new URLSearchParams(location.search).get('id');
+
+  function safeUrl(value){
+    try {
+      const url = new URL(String(value), location.origin);
+      return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+    } catch (error) { return ''; }
+  }
+
+  function flairLabel(value){
+    const map = { mod:'Mod Post', announcement:'Announcement', showcase:'Showcase', tips:'Tips & Tricks', help:'Help', discussion:'Discussion', bug:'Bug Report', weekly:'Weekly Thread' };
+    return map[value] || String(value || 'Discussion').replace(/(^|\s)\S/g, function(part){ return part.toUpperCase(); });
+  }
+
+  function formatDate(value){
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    return date.toLocaleString(undefined, { dateStyle:'medium', timeStyle:'short' });
+  }
+
+  function formatSize(bytes){
+    const value = Number(bytes) || 0;
+    if (!value) return '';
+    const units = ['B', 'KB', 'MB', 'GB'];
+    let index = 0;
+    let size = value;
+    while (size >= 1024 && index < units.length - 1) { size /= 1024; index += 1; }
+    return (size >= 10 || index === 0 ? Math.round(size) : size.toFixed(1)) + ' ' + units[index];
+  }
+
+  function fileLabel(name, mime){
+    const clean = String(name || '');
+    const dot = clean.lastIndexOf('.');
+    if (dot > -1 && dot < clean.length - 1) return clean.slice(dot + 1, dot + 5).toUpperCase();
+    const type = String(mime || '').split('/')[1];
+    return (type ? type.slice(0, 4) : 'FILE').toUpperCase();
+  }
+
+  function downloadUrl(raw, name){
+    const url = safeUrl(raw);
+    if (!url) return '';
+    try {
+      const parsed = new URL(url);
+      parsed.searchParams.set('download', String(name || 'file'));
+      return parsed.href;
+    } catch (error) { return url; }
+  }
+
+  function openLightbox(src, alt){
+    if (!src) return;
+    lightboxImage.src = src;
+    lightboxImage.alt = alt || 'Image preview';
+    lightbox.hidden = false;
+    document.body.classList.add('post-lightbox-open');
+  }
+
+  function closeLightbox(){
+    lightbox.hidden = true;
+    lightboxImage.removeAttribute('src');
+    document.body.classList.remove('post-lightbox-open');
+  }
+
+  lightbox.addEventListener('click', function(event){
+    if (event.target === lightbox || event.target.closest('[data-post-lightbox-close]')) closeLightbox();
+  });
+  document.addEventListener('keydown', function(event){
+    if (event.key === 'Escape' && !lightbox.hidden) closeLightbox();
+  });
+
+  function showError(message){
+    statusEl.textContent = message;
+    statusEl.hidden = false;
+    article.hidden = true;
+  }
+
+  function renderMedia(post){
+    const items = Array.isArray(post.attachments) ? post.attachments : [];
+    const images = items.filter(function(item){ return item && item.kind === 'image' && safeUrl(item.url); });
+    const files = items.filter(function(item){ return item && item.kind === 'file' && safeUrl(item.url); });
+
+    if (images.length){
+      mediaEl.hidden = false;
+      mediaEl.classList.toggle('single', images.length === 1);
+      images.forEach(function(item, index){
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'post-media-item';
+        button.setAttribute('aria-label', 'Open image ' + (index + 1) + ' of ' + images.length);
+        const image = document.createElement('img');
+        image.src = safeUrl(item.url);
+        image.alt = String(item.name || 'Post image');
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        button.appendChild(image);
+        button.addEventListener('click', function(){ openLightbox(image.src, image.alt); });
+        mediaEl.appendChild(button);
+      });
+    } else {
+      mediaEl.hidden = true;
+    }
+
+    if (files.length){
+      filesEl.hidden = false;
+      files.forEach(function(item){
+        const name = String(item.name || 'file');
+        const link = document.createElement('a');
+        link.className = 'post-file';
+        link.href = downloadUrl(item.url, name);
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        const icon = document.createElement('span');
+        icon.className = 'post-file-icon';
+        icon.textContent = fileLabel(name, item.mime);
+        const info = document.createElement('span');
+        info.className = 'post-file-info';
+        const nameEl = document.createElement('span');
+        nameEl.className = 'post-file-name';
+        nameEl.textContent = name;
+        const meta = document.createElement('span');
+        meta.className = 'post-file-meta';
+        meta.textContent = [formatSize(item.size), fileLabel(name, item.mime) + ' file'].filter(Boolean).join(' · ');
+        info.appendChild(nameEl);
+        info.appendChild(meta);
+        const download = document.createElement('span');
+        download.className = 'post-file-download';
+        download.textContent = 'Download ↓';
+        link.appendChild(icon);
+        link.appendChild(info);
+        link.appendChild(download);
+        filesEl.appendChild(link);
+      });
+    } else {
+      filesEl.hidden = true;
+    }
+  }
+
+  function render(post, profile){
+    document.title = String(post.title || 'Post') + ' — r/MuseAi';
+    const flair = document.createElement('span');
+    flair.className = 'post-flair';
+    flair.textContent = flairLabel(post.flair);
+    const author = document.createElement('a');
+    author.className = 'post-author';
+    author.href = 'profile.html?user=' + encodeURIComponent(post.author_id);
+    author.textContent = 'u/' + ((profile && profile.username) || 'member');
+    const time = document.createElement('span');
+    time.textContent = formatDate(post.created_at);
+    const score = document.createElement('span');
+    score.textContent = '▲ ' + (Number(post.score) || 0);
+    const comments = document.createElement('span');
+    comments.textContent = '💬 ' + (Number(post.comments) || 0);
+    metaEl.append(flair, author, time, score, comments);
+    titleEl.textContent = String(post.title || 'Untitled post');
+    bodyEl.textContent = String(post.body || '');
+    bodyEl.hidden = !post.body;
+    renderMedia(post);
+    statusEl.hidden = true;
+    article.hidden = false;
+  }
+
+  async function load(){
+    if (!postId){
+      showError('No post was specified. Return to the feed to choose a post.');
+      return;
+    }
+    if (!window.supabase){
+      showError('The post service could not load. Please refresh and try again.');
+      return;
+    }
+    try {
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+      const result = await client.from('museai_posts').select('*').eq('id', postId).maybeSingle();
+      if (result.error) throw result.error;
+      if (!result.data){
+        showError('This post could not be found. It may have been removed.');
+        return;
+      }
+      let profile = null;
+      try {
+        const profileResult = await client.from('profiles').select('id,username,full_name,avatar_url').eq('id', result.data.author_id).maybeSingle();
+        profile = profileResult.data || null;
+      } catch (profileError) { profile = null; }
+      render(result.data, profile);
+    } catch (error) {
+      console.error('Post load error:', error);
+      showError('This post could not be loaded right now. Please try again.');
+    }
+  }
+
+  load();
+})();
+</script>
+</main>
+<footer class="site-footer"><div class="wrap site-footer-inner"><div class="footer-topline"><a class="footer-brand" href="https://www.fedpromptly.org" target="_blank" rel="noopener noreferrer"><img src="assets/museai-symbol.svg" alt="FED-OS symbol"><span><strong>FED-OS</strong><small>Explore the creative ecosystem.</small></span></a><a class="button" href="support.html">Support the spark ↗</a></div><div class="footer-columns"><section class="footer-col"><h3>FED-OS</h3><div class="footer-links"><a href="https://www.fedpromptly.org" target="_blank" rel="noopener noreferrer">Ecosystem</a><a href="https://www.fedpromptly.com/aid" target="_blank" rel="noopener noreferrer">Membership</a><a href="https://www.jabburr.com/fed-os" target="_blank" rel="noopener noreferrer">Storefront</a><a href="https://whop.com/fedpromptly/" target="_blank" rel="noopener noreferrer">Whop</a></div></section><section class="footer-col"><h3>Support & media</h3><div class="footer-links"><a href="https://www.patreon.com/c/FEDpromptly" target="_blank" rel="noopener noreferrer">Patreon</a><a href="https://buymeacoffee.com/fedpromptly" target="_blank" rel="noopener noreferrer">Tips</a><a href="https://substack.com/@fedpromptly" target="_blank" rel="noopener noreferrer">Articles</a><a href="https://fedpromptly.wordpress.com/" target="_blank" rel="noopener noreferrer">Blog</a><a href="https://gitfed.substack.com/" target="_blank" rel="noopener noreferrer">GitFed Blog</a><a href="https://www.deviantart.com/fedpromptly" target="_blank" rel="noopener noreferrer">Artwork</a><a href="https://bsky.app/profile/fed-os.bsky.social" target="_blank" rel="noopener noreferrer">Bluesky</a><a href="https://x.com/Fedpromptly" target="_blank" rel="noopener noreferrer">X / Ads</a></div></section><section class="footer-col"><h3>Contact</h3><a class="footer-email" href="mailto:contact@fedpromptly.com">General · contact@fedpromptly.com</a><a class="footer-email" href="mailto:support@fedpromptly.com">Support · support@fedpromptly.com</a><a class="footer-email" href="mailto:business@fedpromptly.com">Business · business@fedpromptly.com</a><a class="footer-email" href="mailto:careers@fedpromptly.com">Careers · careers@fedpromptly.com</a><div class="footer-links" style="margin-top:10px"><a href="discord.html">Developers Discord</a><a href="private-communities.html">Private Communities</a></div></section></div><div class="footer-bottom"><span>✦ Public links stay public. Restricted rooms stay gated.</span><span><a href="privacy.html">Privacy</a> · <a href="content-policy.html">Content policy</a> · <a href="index.html">Home</a></span></div></div></footer></body></html>

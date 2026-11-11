@@ -1299,6 +1299,286 @@
       .modal-card { padding: 24px; }
       .modal-card h2 { font-size: 1.5rem; }
   }
+
+  /* =========================================================
+     IMAGE + FILE COMPOSER
+     ========================================================= */
+  .create-post{flex-wrap:wrap;}
+  .composer-open{
+    flex:1;min-width:180px;height:40px;border-radius:999px;
+    border:1px solid var(--border-strong);background:var(--vote-bg);
+    padding:0 16px;font:inherit;font-size:14px;color:var(--muted);
+    text-align:left;display:flex;align-items:center;gap:9px;cursor:text;
+    transition:border-color .15s,background .15s,color .15s;
+  }
+  .composer-open:hover,.composer-open:focus-visible{
+    outline:none;border-color:var(--accent);background:var(--card);color:var(--text);
+  }
+  .composer-open-icon{font-size:15px;line-height:1;opacity:.75;}
+  .composer-quick-actions{display:flex;align-items:center;gap:6px;}
+  .composer-quick{
+    height:36px;padding:0 12px;border-radius:999px;
+    border:1px solid var(--border);background:var(--card);color:var(--muted-dark);
+    font:inherit;font-weight:700;font-size:12px;display:inline-flex;align-items:center;
+    gap:6px;cursor:pointer;transition:background .15s,border-color .15s,color .15s;
+  }
+  .composer-quick:hover{background:var(--hover);border-color:var(--border-strong);color:var(--text);}
+  .composer-quick svg{width:16px;height:16px;flex-shrink:0;}
+  @media(max-width:560px){
+    .composer-quick{display:none;}
+    .composer-open{height:44px;font-size:13px;}
+  }
+  .composer-overlay{z-index:100000;}
+  .composer-card{
+    max-width:680px;padding:0;background:var(--card);border-color:var(--border);
+    color:var(--text);max-height:min(92vh,900px);overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .composer-card .composer-head{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+    padding:24px 26px 0;
+  }
+  .composer-head .eyebrow{
+    font-size:10px;letter-spacing:1.4px;text-transform:uppercase;
+    color:var(--accent);font-weight:900;
+  }
+  .composer-head h2{
+    font-family:"Instrument Serif",Georgia,serif;font-size:1.85rem;line-height:1.05;
+    color:var(--text);margin:5px 0 0;letter-spacing:-.02em;
+  }
+  .composer-card .close{color:var(--muted);}
+  .composer-card .close:hover{color:var(--text);background:var(--hover);}
+  .composer-form{padding:18px 26px 24px;overflow-y:auto;display:block;min-height:0;}
+  .composer-card .form-group{margin-bottom:16px;}
+  .composer-card label{
+    display:block;font-size:12px;font-weight:800;color:var(--text);
+    margin-bottom:6px;letter-spacing:.1px;
+  }
+  .composer-card .optional{font-weight:600;color:var(--muted);font-size:11px;margin-left:4px;}
+  .composer-card .req{color:#ef4444;}
+  .composer-card input[type="text"],.composer-card textarea{
+    width:100%;border:1px solid var(--border-strong);border-radius:12px;
+    background:var(--vote-bg);color:var(--text);font:inherit;font-size:14px;
+    padding:12px 14px;transition:border-color .15s,box-shadow .15s,background .15s;
+  }
+  .composer-card input[type="text"]{height:46px;}
+  .composer-card textarea{min-height:112px;resize:vertical;line-height:1.55;}
+  .composer-card input[type="text"]::placeholder,.composer-card textarea::placeholder{color:var(--muted);}
+  .composer-card input[type="text"]:focus,.composer-card textarea:focus{
+    outline:none;border-color:var(--accent);background:var(--card);
+    box-shadow:0 0 0 3px var(--accent-soft);
+  }
+  .composer-count{text-align:right;font-size:11px;color:var(--muted);margin-top:4px;}
+  .flair-picker{display:flex;flex-wrap:wrap;gap:7px;}
+  .composer-flair{
+    display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;
+    border:1px solid var(--border);background:var(--card);color:var(--muted-dark);
+    font:inherit;font-size:12px;font-weight:800;cursor:pointer;
+    transition:background .15s,border-color .15s,color .15s;
+  }
+  .composer-flair .flair-dot{width:8px;height:8px;border-radius:50%;background:var(--flair);flex-shrink:0;}
+  .composer-flair:hover{background:var(--hover);color:var(--text);}
+  .composer-flair.active{
+    background:color-mix(in srgb,var(--flair) 15%,var(--card));
+    border-color:var(--flair);color:var(--text);
+  }
+  .composer-media-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  .composer-limits{font-size:10.5px;color:var(--muted);}
+  .composer-dropzone{
+    border:1.5px dashed var(--border-strong);border-radius:16px;background:var(--vote-bg);
+    padding:20px 16px;text-align:center;color:var(--muted-dark);font-size:12.5px;
+    transition:border-color .15s,background .15s;
+  }
+  .composer-dropzone:hover,.composer-dropzone.dragover,.composer-dropzone:focus-visible{
+    outline:none;border-color:var(--accent);background:var(--accent-soft);
+  }
+  .composer-drop-icon{
+    width:38px;height:38px;border-radius:12px;margin:0 auto 8px;
+    display:grid;place-items:center;background:var(--card);border:1px solid var(--border);
+    color:var(--accent);font-size:17px;
+  }
+  .composer-dropzone strong{color:var(--text);font-size:13px;}
+  .composer-drop-actions{display:flex;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .btn-soft{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    padding:8px 13px;border-radius:999px;border:1px solid var(--border-strong);
+    background:var(--card);color:var(--text);font:inherit;font-size:12px;font-weight:800;
+    cursor:pointer;transition:background .15s,border-color .15s,color .15s;
+  }
+  .btn-soft:hover{background:var(--hover);border-color:var(--accent);color:var(--accent);}
+  .composer-drop-hint{font-size:11px;color:var(--muted);margin-top:8px;}
+  .composer-attachments{margin-top:12px;display:grid;gap:10px;}
+  .composer-attachments[hidden]{display:none!important;}
+  .composer-images{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;}
+  .composer-image{
+    position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;
+    border:1px solid var(--border);background:var(--vote-bg);
+  }
+  .composer-image img{width:100%;height:100%;object-fit:cover;display:block;}
+  .composer-image .remove,.composer-file .remove{
+    width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,.35);
+    background:rgba(12,15,20,.72);color:#fff;font-size:14px;line-height:1;
+    display:grid;place-items:center;cursor:pointer;padding:0;
+  }
+  .composer-image .remove{position:absolute;top:4px;right:4px;}
+  .composer-image .remove:hover,.composer-file .remove:hover{background:#ef4444;border-color:#ef4444;}
+  .composer-files{display:grid;gap:6px;}
+  .composer-file{
+    display:flex;align-items:center;gap:10px;padding:8px 10px;
+    border:1px solid var(--border);border-radius:11px;background:var(--card);
+  }
+  .file-badge{
+    width:34px;height:38px;border-radius:8px;flex-shrink:0;
+    display:grid;place-items:center;font-size:9px;font-weight:900;letter-spacing:.4px;
+    background:color-mix(in srgb,var(--file-color) 14%,var(--card));
+    color:var(--file-color);
+    border:1px solid color-mix(in srgb,var(--file-color) 26%,transparent);
+  }
+  .composer-file-info{min-width:0;flex:1;}
+  .composer-file-info strong{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .composer-file-info small{font-size:10.5px;color:var(--muted);}
+  .composer-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap;}
+  .composer-tip{font-size:11px;color:var(--muted);}
+  .composer-action-buttons{display:flex;gap:8px;margin-left:auto;}
+  .composer-card .btn-primary.composer-submit{
+    width:auto;padding:11px 20px;border-radius:12px;font-size:13px;font-weight:800;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    box-shadow:0 8px 20px rgba(124,58,237,.25);text-shadow:none;
+  }
+  .composer-card .btn-primary.composer-submit:hover{filter:brightness(1.08);}
+  .composer-card .btn-secondary{
+    padding:11px 16px;border:1px solid var(--border-strong);border-radius:12px;
+    font:inherit;font-size:13px;font-weight:700;color:var(--muted-dark);background:var(--card);
+    cursor:pointer;transition:background .15s,color .15s;
+  }
+  .composer-card .btn-secondary:hover{background:var(--hover);color:var(--text);}
+  .composer-card .btn-secondary:disabled,.composer-card .btn-primary:disabled{opacity:.55;cursor:not-allowed;}
+  .composer-message{
+    display:none;padding:10px 12px;border-radius:10px;font-size:12.5px;margin-top:12px;
+  }
+  .composer-message.error{
+    display:block;background:rgba(239,68,68,.1);color:#ef4444;
+    border:1px solid rgba(239,68,68,.28);
+  }
+  .composer-message.info{
+    display:block;background:var(--accent-soft);color:var(--accent);
+    border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);
+  }
+  .composer-progress{margin-top:14px;}
+  .composer-progress[hidden]{display:none!important;}
+  .composer-progress-bar{
+    height:6px;border-radius:999px;background:var(--vote-bg);overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .composer-progress-bar span{
+    display:block;height:100%;width:0;border-radius:999px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    transition:width .25s ease;
+  }
+  .composer-progress-label{font-size:11px;color:var(--muted);margin-top:5px;}
+  .composer-card.is-busy .composer-dropzone{opacity:.6;pointer-events:none;}
+  @media(max-width:640px){
+    .composer-overlay{padding:0;align-items:stretch;}
+    .composer-card{max-width:none;width:100%;height:100%;max-height:none;border-radius:0;border:0;}
+    .composer-card .composer-head{padding:18px 18px 0;}
+    .composer-head h2{font-size:1.5rem;}
+    .composer-form{padding:14px 18px 24px;}
+    .composer-images{grid-template-columns:repeat(3,1fr);}
+    .composer-tip{display:none;}
+    .composer-action-buttons{margin-left:0;width:100%;}
+    .composer-action-buttons .btn-secondary,.composer-action-buttons .btn-primary{flex:1;}
+  }
+
+  /* =========================================================
+     POST MEDIA + FILE ATTACHMENTS
+     ========================================================= */
+  .post-text{white-space:pre-wrap;overflow-wrap:anywhere;}
+  .post-media{
+    display:grid;gap:4px;margin:2px 0 10px;border-radius:14px;overflow:hidden;
+    border:1px solid var(--border);background:var(--vote-bg);
+  }
+  .post-media[data-count="1"]{grid-template-columns:1fr;}
+  .post-media[data-count="2"],.post-media[data-count="4"]{grid-template-columns:repeat(2,1fr);}
+  .post-media[data-count="3"],.post-media[data-count="5"],.post-media[data-count="6"]{grid-template-columns:repeat(3,1fr);}
+  .post-media-item{
+    position:relative;display:block;padding:0;border:0;background:var(--vote-bg);
+    cursor:zoom-in;overflow:hidden;
+  }
+  .post-media-item img{
+    display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:4/3;
+    transition:transform .35s ease,filter .35s ease;
+  }
+  .post-media[data-count="1"] .post-media-item img{aspect-ratio:16/9;max-height:460px;}
+  .post-media-item:hover img,.post-media-item:focus-visible img{transform:scale(1.025);filter:brightness(1.03);}
+  .post-media-item::after{
+    content:"⤢";position:absolute;top:8px;right:8px;width:26px;height:26px;
+    border-radius:50%;background:rgba(0,0,0,.45);color:#fff;display:grid;place-items:center;
+    font-size:13px;opacity:0;transition:opacity .2s;
+  }
+  .post-media-item:hover::after,.post-media-item:focus-visible::after{opacity:1;}
+  .post-files{display:grid;gap:6px;margin:0 0 10px;}
+  .post-file{
+    display:flex;align-items:center;gap:10px;padding:8px 10px;
+    border:1px solid var(--border);border-radius:12px;background:var(--vote-bg);
+    text-decoration:none;color:var(--text);transition:background .15s,border-color .15s;
+  }
+  .post-file:hover{background:var(--hover);border-color:var(--border-strong);}
+  .post-file-info{min-width:0;flex:1;}
+  .post-file-info strong{display:block;font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .post-file-info small{font-size:10.5px;color:var(--muted);}
+  .post-file-dl{font-size:11px;font-weight:800;color:var(--accent);white-space:nowrap;}
+  @media(max-width:640px){
+    .post-media[data-count="3"],.post-media[data-count="5"],.post-media[data-count="6"]{grid-template-columns:repeat(2,1fr);}
+    .post-file-dl{display:none;}
+  }
+
+  /* =========================================================
+     IMAGE LIGHTBOX
+     ========================================================= */
+  .lightbox{position:fixed;inset:0;z-index:100001;display:flex;align-items:center;justify-content:center;padding:24px;}
+  .lightbox[hidden]{display:none!important;}
+  .lightbox-backdrop{position:absolute;inset:0;background:rgba(5,8,12,.96);}
+  .lightbox-dialog{position:relative;z-index:1;max-width:min(1100px,94vw);max-height:92vh;display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .lightbox-figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:0;}
+  .lightbox-figure img{
+    max-width:94vw;max-height:calc(92vh - 90px);border-radius:12px;
+    box-shadow:0 30px 80px rgba(0,0,0,.5);background:#111;display:block;
+  }
+  .lightbox-figure figcaption{
+    color:rgba(255,255,255,.75);font-size:12px;max-width:80vw;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .lightbox-close{
+    position:fixed;top:18px;right:20px;width:40px;height:40px;border-radius:50%;
+    border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;
+    font-size:22px;line-height:1;display:grid;place-items:center;cursor:pointer;z-index:2;
+  }
+  .lightbox-close:hover{background:rgba(255,255,255,.22);}
+  .lightbox-nav{
+    position:fixed;top:50%;transform:translateY(-50%);width:46px;height:46px;
+    border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);
+    color:#fff;font-size:28px;line-height:1;display:grid;place-items:center;cursor:pointer;z-index:2;
+  }
+  .lightbox-nav:hover{background:rgba(255,255,255,.22);}
+  .lightbox-nav[hidden]{display:none!important;}
+  .lightbox-prev{left:18px;}
+  .lightbox-next{right:18px;}
+  .lightbox-download{
+    position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+    padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.22);color:#fff;font-size:12px;font-weight:700;
+    text-decoration:none;z-index:2;
+  }
+  .lightbox-download:hover{background:rgba(255,255,255,.22);}
+  body.lightbox-open{overflow:hidden;}
+  @media(max-width:640px){
+    .lightbox{padding:10px;}
+    .lightbox-figure img{max-width:100vw;max-height:calc(100vh - 120px);border-radius:8px;}
+    .lightbox-nav{width:38px;height:38px;font-size:23px;}
+    .lightbox-prev{left:8px;}
+    .lightbox-next{right:8px;}
+    .lightbox-close{top:10px;right:10px;}
+  }
 </style>
 </head>
 <body>
@@ -1420,7 +1700,7 @@
         <div class="lbl">Subscribers</div>
       </div>
     </div>
-    <a class="join-btn" id="joinBtn" href="join.html">Join</a>
+    <a class="join-btn" id="joinBtn" href="https://www.reddit.com/r/MuseAiArt/">Join</a>
     <a class="icon-btn" href="more.html" title="More options" aria-label="More options">⋯</a>
   </div>
 
@@ -1454,8 +1734,21 @@
       <!-- Create post -->
       <div class="create-post" id="communityComposer">
         <div class="avatar" id="composerAvatar" hidden>Y</div>
-        <input type="text" id="createInput" placeholder="Share a creation, prompt, or question with r/MuseAi…" aria-label="Create Post">
-        <button class="post-btn" id="createBtn" disabled>Post</button>
+        <button type="button" class="composer-open" id="composerOpen" aria-haspopup="dialog" aria-controls="composerModal">
+          <span class="composer-open-icon" aria-hidden="true">✎</span>
+          <span>Share a creation, prompt, or question with r/MuseAi…</span>
+        </button>
+        <div class="composer-quick-actions">
+          <button type="button" class="composer-quick" data-composer-open="image" title="Add images to a new post">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>Image</span>
+          </button>
+          <button type="button" class="composer-quick" data-composer-open="file" title="Attach files to a new post">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            <span>File</span>
+          </button>
+          <button class="post-btn" id="createBtn" type="button">Post</button>
+        </div>
       </div>
 
       <!-- Promotional gallery -->
@@ -1702,6 +1995,86 @@
 </div>
 
 <!-- =========================================================
+     IMAGE + FILE COMPOSER MODAL
+     ========================================================= -->
+<div class="modal-overlay composer-overlay" id="composerModal">
+  <div class="modal-card composer-card" id="composerCard" role="dialog" aria-modal="true" aria-labelledby="composerTitle">
+    <div class="composer-head">
+      <div>
+        <span class="eyebrow">New post · r/MuseAi</span>
+        <h2 id="composerTitle">Share something with the community</h2>
+      </div>
+      <button class="close" id="composerClose" type="button" aria-label="Close post composer">&times;</button>
+    </div>
+    <form class="composer-form" id="composerForm" autocomplete="off" novalidate>
+      <div class="form-group">
+        <label for="composerPostTitle">Title <span class="req" aria-hidden="true">*</span></label>
+        <input type="text" id="composerPostTitle" maxlength="240" placeholder="Give your post a clear title" required />
+        <div class="composer-count"><span id="composerTitleCount">0</span>/240</div>
+      </div>
+      <div class="form-group">
+        <label for="composerBody">Body <span class="optional">optional</span></label>
+        <textarea id="composerBody" maxlength="5000" rows="5" placeholder="Tell the story, paste your prompt, or explain the workflow…"></textarea>
+        <div class="composer-count"><span id="composerBodyCount">0</span>/5,000</div>
+      </div>
+      <div class="form-group">
+        <div class="composer-field-label" id="composerFlairLabel">Flair</div>
+        <div class="flair-picker" id="composerFlair" role="radiogroup" aria-labelledby="composerFlairLabel"></div>
+      </div>
+      <div class="form-group">
+        <div class="composer-media-head">
+          <label for="composerDropzone" style="margin:0">Images &amp; files <span class="optional">optional</span></label>
+          <span class="composer-limits">6 images · 10 MB each &nbsp;•&nbsp; 4 files · 25 MB each</span>
+        </div>
+        <div class="composer-dropzone" id="composerDropzone" tabindex="0" role="button" aria-label="Add images or files to your post">
+          <div class="composer-drop-icon" aria-hidden="true">＋</div>
+          <div><strong>Drag &amp; drop</strong> images or files here</div>
+          <div class="composer-drop-actions">
+            <button type="button" class="btn-soft" id="pickImagesBtn">Choose images</button>
+            <button type="button" class="btn-soft" id="pickFilesBtn">Choose files</button>
+          </div>
+          <div class="composer-drop-hint">or paste an image with Ctrl/⌘ + V</div>
+        </div>
+        <input type="file" id="composerImageInput" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" multiple hidden />
+        <input type="file" id="composerFileInput" multiple hidden />
+        <div class="composer-attachments" id="composerAttachments" hidden>
+          <div class="composer-images" id="composerImagePreview"></div>
+          <div class="composer-files" id="composerFilePreview"></div>
+        </div>
+      </div>
+      <div class="composer-message" id="composerMessage" role="alert"></div>
+      <div class="composer-progress" id="composerProgress" hidden>
+        <div class="composer-progress-bar"><span id="composerProgressFill"></span></div>
+        <div class="composer-progress-label" id="composerProgressLabel">Preparing upload…</div>
+      </div>
+      <div class="composer-actions">
+        <span class="composer-tip">Be kind. Credit your tools. ✦</span>
+        <div class="composer-action-buttons">
+          <button type="button" class="btn-secondary" id="composerCancel">Cancel</button>
+          <button type="submit" class="btn-primary composer-submit" id="composerSubmit" disabled>Publish post</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- =========================================================
+     IMAGE LIGHTBOX
+     ========================================================= -->
+<div class="lightbox" id="lightbox" hidden aria-hidden="true">
+  <div class="lightbox-backdrop" data-lightbox-close></div>
+  <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close image viewer">&times;</button>
+    <button type="button" class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image">‹</button>
+    <figure class="lightbox-figure">
+      <img id="lightboxImage" src="" alt="" />
+      <figcaption id="lightboxCaption"></figcaption>
+    </figure>
+    <button type="button" class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image">›</button>
+    <a class="lightbox-download" id="lightboxDownload" href="#" target="_blank" rel="noopener noreferrer">Download image ↓</a>
+  </div>
+</div>
+
+<!-- =========================================================
      FEED SCRIPT
      ========================================================= -->
 <script>
@@ -1773,7 +2146,71 @@ function toast(msg){
   clearTimeout(toast._t);
   toast._t = setTimeout(() => el.classList.remove('show'), 1900);
 }
-
+function formatBytes(bytes){
+  const n = Number(bytes) || 0;
+  if (n < 1024) return n + ' B';
+  if (n < 1048576) return (n / 1024).toFixed(n < 10240 ? 1 : 0) + ' KB';
+  if (n < 1073741824) return (n / 1048576).toFixed(n < 10485760 ? 1 : 0) + ' MB';
+  return (n / 1073741824).toFixed(1) + ' GB';
+}
+function fileTypeInfo(name, mime){
+  const ext = String(name || '').split('.').pop().toLowerCase();
+  const known = {
+    pdf:['PDF','#ef4444'], doc:['DOC','#2563eb'], docx:['DOC','#2563eb'],
+    xls:['XLS','#16a34a'], xlsx:['XLS','#16a34a'], csv:['CSV','#16a34a'],
+    ppt:['PPT','#ea580c'], pptx:['PPT','#ea580c'], txt:['TXT','#64748b'],
+    md:['MD','#0ea5e9'], json:['JSON','#8b5cf6'], zip:['ZIP','#a16207'],
+    rar:['RAR','#a16207'], '7z':['7Z','#a16207'], mp4:['MP4','#db2777'],
+    webm:['WEBM','#db2777'], mov:['MOV','#db2777'], mp3:['MP3','#db2777'],
+    wav:['WAV','#db2777'], psd:['PSD','#1e40af'], ai:['AI','#f59e0b'],
+    fig:['FIG','#a855f7'], glb:['GLB','#0d9488'], fbx:['FBX','#0d9488'],
+    blend:['BLEND','#f97316']
+  };
+  if (known[ext]) return known[ext];
+  if ((mime || '').startsWith('image/')) return ['IMG','#8b5cf6'];
+  if ((mime || '').startsWith('video/')) return ['VID','#db2777'];
+  if ((mime || '').startsWith('audio/')) return ['AUD','#db2777'];
+  return ['FILE','#64748b'];
+}
+function safeMediaUrl(url){
+  const value = String(url || '').trim();
+  return /^https?:\/\//i.test(value) ? value : '';
+}
+function mediaDownloadUrl(media){
+  const url = safeMediaUrl(media && media.url);
+  if (!url) return '';
+  return url + (url.includes('?') ? '&' : '?') + 'download=' + encodeURIComponent((media && media.name) || 'download');
+}
+function postImages(post){
+  return (Array.isArray(post && post.attachments) ? post.attachments : [])
+    .filter(item => item && item.kind === 'image' && safeMediaUrl(item.url));
+}
+function renderPostMedia(p){
+  const media = Array.isArray(p.attachments) ? p.attachments : [];
+  const images = media.filter(item => item && item.kind === 'image' && safeMediaUrl(item.url));
+  const files = media.filter(item => item && item.kind === 'file' && safeMediaUrl(item.url));
+  if (!images.length && !files.length) return '';
+  const gallery = images.length ? `
+    <div class="post-media" data-count="${Math.min(images.length, 6)}">
+      ${images.map((image, index) => `
+        <button type="button" class="post-media-item" data-lightbox="${index}" aria-label="Open image ${index + 1} of ${images.length}">
+          <img src="${escapeHTML(safeMediaUrl(image.url))}" alt="${escapeHTML(image.alt || image.name || 'Image shared in the MuseAi community')}" loading="lazy" decoding="async"${image.width ? ` width="${Number(image.width)}"` : ''}${image.height ? ` height="${Number(image.height)}"` : ''}>
+        </button>`).join('')}
+    </div>` : '';
+  const fileList = files.length ? `
+    <div class="post-files">
+      ${files.map(file => {
+        const [label, color] = fileTypeInfo(file.name, file.mime);
+        const href = mediaDownloadUrl(file);
+        return `<a class="post-file" href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer" title="Download ${escapeHTML(file.name || 'file')}">
+          <span class="file-badge" style="--file-color:${color}" aria-hidden="true">${label}</span>
+          <span class="post-file-info"><strong>${escapeHTML(file.name || 'Attachment')}</strong><small>${formatBytes(file.size)} · ${label} file</small></span>
+          <span class="post-file-dl" aria-hidden="true">Download ↓</span>
+        </a>`;
+      }).join('')}
+    </div>` : '';
+  return gallery + fileList;
+}
 /* =========================================================
    SORTING & FILTERING
    ========================================================= */
@@ -1834,6 +2271,10 @@ function renderPost(p){
   const awardsHTML = p.awards ? `<span class="award">🏅 ${escapeHTML(p.awards)}</span>` : '';
   const pinHTML = p.pinned ? `<span class="pin-badge">PINNED</span>` : '';
   const opHTML = p.op ? `<span class="op-badge">OP</span>` : '';
+  const images = postImages(p);
+  const thumbBg = /^#[0-9a-f]{3,8}$/i.test(String(p.thumbBg || '')) ? p.thumbBg : '#ede9fe';
+  const mediaHTML = renderPostMedia(p);
+  const showTextBlock = !!p.body || !images.length;
 
   return `
     <article class="post ${p.pinned ? 'pinned' : ''}" data-id="${escapeHTML(p.id)}">
@@ -1862,10 +2303,11 @@ function renderPost(p){
           ${escapeHTML(p.title)}
         </a>
 
-        <div class="post-content">
+        ${showTextBlock ? `<div class="post-content">
           ${p.body ? `<p class="post-text">${escapeHTML(p.body)}</p>` : ""}
-          <div class="thumb" style="background:${p.thumbBg};">${p.thumb}</div>
-        </div>
+          ${images.length ? "" : `<div class="thumb" style="background:${thumbBg};">${escapeHTML(p.thumb || '✨')}</div>`}
+        </div>` : ""}
+        ${mediaHTML}
 
         <div class="post-actions">
           <button class="action" data-comments-toggle aria-expanded="${isCommentsOpen}"><span class="ico">💬</span>${p.comments == null ? '—' : p.comments} Comments</button>
@@ -1931,9 +2373,74 @@ function renderChips(){
 /* =========================================================
    EVENTS
    ========================================================= */
-
+/* =========================================================
+   IMAGE LIGHTBOX
+   ========================================================= */
+const lightboxState = { images: [], index: 0 };
+const lightboxEl = document.getElementById('lightbox');
+const lightboxImage = document.getElementById('lightboxImage');
+const lightboxCaption = document.getElementById('lightboxCaption');
+const lightboxDownload = document.getElementById('lightboxDownload');
+const lightboxPrev = document.getElementById('lightboxPrev');
+const lightboxNext = document.getElementById('lightboxNext');
+function lightboxShow(index){
+  const images = lightboxState.images;
+  if (!images.length) return;
+  const total = images.length;
+  lightboxState.index = (index + total) % total;
+  const image = images[lightboxState.index];
+  lightboxImage.src = safeMediaUrl(image.url);
+  lightboxImage.alt = image.alt || image.name || 'Community image';
+  lightboxCaption.textContent = (image.name || 'Image') + (total > 1 ? ` · ${lightboxState.index + 1} of ${total}` : '');
+  lightboxDownload.href = mediaDownloadUrl(image);
+  lightboxPrev.hidden = total < 2;
+  lightboxNext.hidden = total < 2;
+}
+function openLightbox(images, index){
+  if (!images || !images.length) return;
+  lightboxState.images = images;
+  lightboxShow(Number(index) || 0);
+  lightboxEl.hidden = false;
+  lightboxEl.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('lightbox-open');
+  document.getElementById('lightboxClose').focus({ preventScroll: true });
+}
+function closeLightbox(){
+  lightboxEl.hidden = true;
+  lightboxEl.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('lightbox-open');
+  lightboxImage.src = '';
+}
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+lightboxEl.addEventListener('click', event => {
+  if (event.target.closest('[data-lightbox-close]')) closeLightbox();
+});
+lightboxPrev.addEventListener('click', () => lightboxShow(lightboxState.index - 1));
+lightboxNext.addEventListener('click', () => lightboxShow(lightboxState.index + 1));
+document.addEventListener('keydown', event => {
+  if (lightboxEl.hidden) return;
+  if (event.key === 'Escape'){
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    closeLightbox();
+  } else if (event.key === 'ArrowLeft'){
+    event.preventDefault();
+    lightboxShow(lightboxState.index - 1);
+  } else if (event.key === 'ArrowRight'){
+    event.preventDefault();
+    lightboxShow(lightboxState.index + 1);
+  }
+});
 /* --- Voting, saving, sharing (delegated) --- */
 document.getElementById('feed').addEventListener('click', (e) => {
+  const lightboxBtn = e.target.closest('[data-lightbox]');
+  if (lightboxBtn){
+    e.preventDefault();
+    const postEl = lightboxBtn.closest('.post');
+    const post = postEl ? state.posts.find(item => item.id === postEl.dataset.id) : null;
+    openLightbox(postImages(post), Number(lightboxBtn.dataset.lightbox) || 0);
+    return;
+  }
   const voteBtn = e.target.closest('[data-vote]');
   if (voteBtn){
     e.preventDefault();
@@ -2024,29 +2531,7 @@ document.querySelectorAll('[data-related]').forEach(btn => {
   });
 });
 
-/* --- Create post --- */
-const createInput = document.getElementById('createInput');
-const createBtn = document.getElementById('createBtn');
-
-createInput.addEventListener('input', () => {
-  createBtn.disabled = createInput.value.trim().length === 0;
-});
-
-function submitPost(){
-  const title = createInput.value.trim();
-  if (!title) return;
-  if (!window.museCommunity || !window.museCommunity.currentUser){
-    toast('Sign in to share a post');
-    document.getElementById('loginLink').click();
-    return;
-  }
-  window.dispatchEvent(new CustomEvent('muse:post-submit', { detail:{title} }));
-}
-
-createBtn.addEventListener('click', submitPost);
-createInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') submitPost();
-});
+/* --- Create post: the media composer is wired in the community script below. --- */
 
 /* --- Theme toggle --- */
 const themeToggle = document.getElementById('themeToggle');
@@ -2078,7 +2563,8 @@ renderFeed();
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_2NLEuDREplLS9DgUXeA8Tw_f8MJOhCq';
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
   const PROFILE_FIELDS = 'id,username,full_name,avatar_url,bio,website,location,reputation,created_at,updated_at';
-  const POST_FIELDS = 'id,author_id,title,body,flair,thumb,thumb_bg,score,comments,created_at';
+  // Wildcard keeps text-only posts readable even before the media SQL migration is run.
+  const POST_FIELDS = '*';
   let currentUser = null;
   let currentProfile = null;
   let isSignUp = false;
@@ -2130,8 +2616,36 @@ renderFeed();
   const profileModalSub = document.getElementById('profileModalSub');
   const profileMessage = document.getElementById('profileMessage');
   const saveProfileBtn = document.getElementById('saveProfileBtn');
-  const createInput = document.getElementById('createInput');
   const createBtn = document.getElementById('createBtn');
+  const composerModal = document.getElementById('composerModal');
+  const composerCard = document.getElementById('composerCard');
+  const composerForm = document.getElementById('composerForm');
+  const composerTitleInput = document.getElementById('composerPostTitle');
+  const composerBodyInput = document.getElementById('composerBody');
+  const composerFlair = document.getElementById('composerFlair');
+  const composerDropzone = document.getElementById('composerDropzone');
+  const composerImageInput = document.getElementById('composerImageInput');
+  const composerFileInput = document.getElementById('composerFileInput');
+  const composerAttachments = document.getElementById('composerAttachments');
+  const composerImagePreview = document.getElementById('composerImagePreview');
+  const composerFilePreview = document.getElementById('composerFilePreview');
+  const composerMessage = document.getElementById('composerMessage');
+  const composerSubmit = document.getElementById('composerSubmit');
+  const composerClose = document.getElementById('composerClose');
+  const composerCancel = document.getElementById('composerCancel');
+  const composerProgress = document.getElementById('composerProgress');
+  const composerProgressFill = document.getElementById('composerProgressFill');
+  const composerProgressLabel = document.getElementById('composerProgressLabel');
+  const composerTitleCount = document.getElementById('composerTitleCount');
+  const composerBodyCount = document.getElementById('composerBodyCount');
+  const MEDIA_BUCKET = 'museai-media';
+  const IMAGE_LIMIT = 6;
+  const FILE_LIMIT = 4;
+  const IMAGE_MAX_BYTES = 10 * 1024 * 1024;
+  const FILE_MAX_BYTES = 25 * 1024 * 1024;
+  const IMAGE_MIME_TYPES = ['image/jpeg','image/png','image/webp','image/gif','image/avif'];
+  const BLOCKED_FILE_EXTENSIONS = new Set(['html','htm','xhtml','svg','js','mjs','exe','bat','cmd','com','scr','msi','php','phtml','sh','ps1','vbs','jar']);
+  const composerState = { attachments: [], flair: 'discussion', busy: false, pendingIntent: null };
 
   async function recordActivity(memberAction=false){
     const now=Date.now();
@@ -2146,7 +2660,7 @@ renderFeed();
   }
 
   function syncBodyLock(){
-    const active = loginModal.classList.contains('active') || profileModal.classList.contains('active');
+    const active = loginModal.classList.contains('active') || profileModal.classList.contains('active') || composerModal.classList.contains('active');
     document.body.style.overflow = active ? 'hidden' : '';
   }
   function showAuthMessage(message, type='error'){
@@ -2187,6 +2701,410 @@ renderFeed();
       loginLink.style.display=''; signupBtn.style.display='';
       headerAvatar.textContent='Y'; headerAvatar.classList.remove('logged-in'); headerAvatar.title='Log in';
       if (composerAvatar){ composerAvatar.textContent='Y'; composerAvatar.title=''; }
+    }
+  }
+  /* =========================================================
+     MEDIA COMPOSER
+     ========================================================= */
+  function composerId(){
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, ch => {
+      const random = Math.random() * 16 | 0;
+      return (ch === 'x' ? random : (random & 0x3 | 0x8)).toString(16);
+    });
+  }
+  const COMPOSER_MIME_EXTENSIONS = {
+    'image/jpeg':'jpg','image/png':'png','image/webp':'webp','image/gif':'gif','image/avif':'avif',
+    'application/pdf':'pdf','application/zip':'zip','text/plain':'txt','text/markdown':'md',
+    'text/csv':'csv','application/json':'json','video/mp4':'mp4','audio/mpeg':'mp3'
+  };
+  function composerExtension(file){
+    const fromMime = COMPOSER_MIME_EXTENSIONS[file.type];
+    if (fromMime) return fromMime;
+    const ext = String(file.name || '').split('.').pop().toLowerCase().replace(/[^a-z0-9]/g,'');
+    return ext && ext.length <= 8 ? ext : 'bin';
+  }
+  function updateComposerCounts(){
+    composerTitleCount.textContent = String(composerTitleInput.value.length);
+    composerBodyCount.textContent = composerBodyInput.value.length.toLocaleString('en-US');
+  }
+  function updateComposerSubmit(){
+    composerSubmit.disabled = composerState.busy || !composerTitleInput.value.trim();
+    composerSubmit.textContent = composerState.busy ? 'Publishing…' : 'Publish post';
+  }
+  function setComposerBusy(busy){
+    composerState.busy = !!busy;
+    composerCard.classList.toggle('is-busy', composerState.busy);
+    composerForm.querySelectorAll('input, textarea, button').forEach(element => {
+      if (element !== composerSubmit) element.disabled = composerState.busy;
+    });
+    composerClose.disabled = composerState.busy;
+    updateComposerSubmit();
+  }
+  function showComposerMessage(text, type='error'){
+    composerMessage.textContent = text;
+    composerMessage.className = 'composer-message ' + type;
+  }
+  function hideComposerMessage(){
+    composerMessage.textContent = '';
+    composerMessage.className = 'composer-message';
+  }
+  function renderComposerFlair(){
+    composerFlair.innerHTML = Object.entries(FLARES).map(([key, flair]) => {
+      const active = key === composerState.flair;
+      return `<button type="button" class="composer-flair${active ? ' active' : ''}" data-composer-flair="${key}" role="radio" aria-checked="${active}" style="--flair:${flair.color}"><span class="flair-dot" aria-hidden="true"></span>${escapeHTML(flair.label)}</button>`;
+    }).join('');
+  }
+  function renderComposerAttachments(){
+    const images = composerState.attachments.filter(item => item.kind === 'image');
+    const files = composerState.attachments.filter(item => item.kind === 'file');
+    composerImagePreview.innerHTML = images.map(item => `
+      <div class="composer-image">
+        <img src="${item.previewUrl}" alt="${escapeHTML(item.file.name)}" />
+        <button type="button" class="remove" data-remove-attachment="${item.id}" aria-label="Remove ${escapeHTML(item.file.name)}">&times;</button>
+      </div>`).join('');
+    composerFilePreview.innerHTML = files.map(item => {
+      const [label, color] = fileTypeInfo(item.file.name, item.file.type);
+      return `<div class="composer-file">
+        <span class="file-badge" style="--file-color:${color}" aria-hidden="true">${label}</span>
+        <span class="composer-file-info"><strong>${escapeHTML(item.file.name)}</strong><small>${formatBytes(item.file.size)}</small></span>
+        <button type="button" class="remove" data-remove-attachment="${item.id}" aria-label="Remove ${escapeHTML(item.file.name)}">&times;</button>
+      </div>`;
+    }).join('');
+    composerAttachments.hidden = composerState.attachments.length === 0;
+  }
+  function removeComposerAttachment(id){
+    const index = composerState.attachments.findIndex(item => item.id === id);
+    if (index < 0) return;
+    const [removed] = composerState.attachments.splice(index, 1);
+    if (removed.previewUrl) URL.revokeObjectURL(removed.previewUrl);
+    renderComposerAttachments();
+    hideComposerMessage();
+  }
+  function addComposerFiles(fileList, preferredKind){
+    if (composerState.busy) return;
+    const incoming = Array.from(fileList || []);
+    if (!incoming.length) return;
+    const errors = [];
+    let added = 0;
+    incoming.forEach(file => {
+      const kind = preferredKind || (IMAGE_MIME_TYPES.includes(file.type) ? 'image' : 'file');
+      if (kind === 'image' && !IMAGE_MIME_TYPES.includes(file.type)){
+        errors.push(`${file.name} is not a supported image. Use JPG, PNG, WebP, GIF, or AVIF.`);
+        return;
+      }
+      if (kind === 'file'){
+        const ext = String(file.name || '').split('.').pop().toLowerCase();
+        if (BLOCKED_FILE_EXTENSIONS.has(ext)){
+          errors.push(`${file.name} cannot be attached for security reasons.`);
+          return;
+        }
+      }
+      const count = composerState.attachments.filter(item => item.kind === kind).length;
+      const max = kind === 'image' ? IMAGE_LIMIT : FILE_LIMIT;
+      if (count >= max){
+        errors.push(`You can attach up to ${max} ${kind === 'image' ? 'images' : 'files'} per post.`);
+        return;
+      }
+      const limit = kind === 'image' ? IMAGE_MAX_BYTES : FILE_MAX_BYTES;
+      if (file.size > limit){
+        errors.push(`${file.name} is ${formatBytes(file.size)} — the limit is ${formatBytes(limit)}.`);
+        return;
+      }
+      if (!file.size){
+        errors.push(`${file.name} is empty.`);
+        return;
+      }
+      const duplicate = composerState.attachments.some(item =>
+        item.kind === kind && item.file.name === file.name && item.file.size === file.size
+      );
+      if (duplicate) return;
+      composerState.attachments.push({
+        id: composerId(),
+        file,
+        kind,
+        previewUrl: kind === 'image' ? URL.createObjectURL(file) : ''
+      });
+      added++;
+    });
+    renderComposerAttachments();
+    updateComposerSubmit();
+    if (errors.length) showComposerMessage(errors.slice(0, 2).join(' '), 'error');
+    else if (added) hideComposerMessage();
+  }
+  function openComposer(intent){
+    const mode = intent === 'image' || intent === 'file' ? intent : 'text';
+    if (!currentUser){
+      composerState.pendingIntent = mode;
+      openLogin(false);
+      toast('Sign in to share a post');
+      return;
+    }
+    if (!currentProfile || !currentProfile.full_name){
+      composerState.pendingIntent = mode;
+      openProfileEditor(true);
+      return;
+    }
+    hideComposerMessage();
+    composerModal.classList.add('active');
+    syncBodyLock();
+    renderComposerFlair();
+    renderComposerAttachments();
+    updateComposerCounts();
+    updateComposerSubmit();
+    setTimeout(() => composerTitleInput.focus({preventScroll:true}), 60);
+    if (mode === 'image') composerImageInput.click();
+    else if (mode === 'file') composerFileInput.click();
+  }
+  function closeComposer(force=false){
+    if (composerState.busy && !force){
+      toast('Please wait for the upload to finish');
+      return;
+    }
+    composerModal.classList.remove('active');
+    syncBodyLock();
+  }
+  function resetComposer(){
+    composerState.attachments.forEach(item => {
+      if (item.previewUrl) URL.revokeObjectURL(item.previewUrl);
+    });
+    composerState.attachments = [];
+    composerState.flair = 'discussion';
+    composerTitleInput.value = '';
+    composerBodyInput.value = '';
+    renderComposerFlair();
+    renderComposerAttachments();
+    updateComposerCounts();
+    updateComposerSubmit();
+    hideComposerMessage();
+    composerProgress.hidden = true;
+    composerProgressFill.style.width = '0%';
+    composerProgressLabel.textContent = 'Preparing upload…';
+  }
+  function setComposerProgress(done, total, label){
+    composerProgress.hidden = false;
+    const percent = total ? Math.round((done / total) * 100) : 0;
+    composerProgressFill.style.width = percent + '%';
+    composerProgressLabel.textContent = label || `Uploading ${done} of ${total}…`;
+  }
+  function loadComposerImage(file){
+    if (window.createImageBitmap){
+      return createImageBitmap(file, {imageOrientation:'from-image'})
+        .catch(() => createImageBitmap(file));
+    }
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const image = new Image();
+      image.onload = () => { URL.revokeObjectURL(url); resolve(image); };
+      image.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Image could not be read')); };
+      image.src = url;
+    });
+  }
+  async function prepareComposerImage(file){
+    const original = {blob:file, mime:file.type, name:file.name, ext:composerExtension(file), width:0, height:0};
+    const canCompress = ['image/jpeg','image/png','image/webp'].includes(file.type);
+    if (!canCompress || file.size < 1.2 * 1024 * 1024){
+      try {
+        const bitmap = await loadComposerImage(file);
+        original.width = bitmap.width || 0;
+        original.height = bitmap.height || 0;
+        if (bitmap.close) bitmap.close();
+      } catch (_) {}
+      return original;
+    }
+    try {
+      const bitmap = await loadComposerImage(file);
+      const width = bitmap.width || 0;
+      const height = bitmap.height || 0;
+      original.width = width;
+      original.height = height;
+      const scale = Math.min(1, 2400 / Math.max(width, height));
+      if (scale >= 1 && file.size < 3.5 * 1024 * 1024){
+        if (bitmap.close) bitmap.close();
+        return original;
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(width * scale));
+      canvas.height = Math.max(1, Math.round(height * scale));
+      const context = canvas.getContext('2d');
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = 'high';
+      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      if (bitmap.close) bitmap.close();
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/webp', 0.86));
+      if (!blob || blob.size >= file.size) return original;
+      return {
+        blob,
+        mime:'image/webp',
+        name:file.name.replace(/\.[^.]+$/, '') + '.webp',
+        ext:'webp',
+        width:canvas.width,
+        height:canvas.height
+      };
+    } catch (error){
+      console.warn('Image compression skipped:', error);
+      return original;
+    }
+  }
+  async function prepareComposerUpload(item){
+    if (item.kind === 'image'){
+      const prepared = await prepareComposerImage(item.file);
+      return {...prepared, kind:'image'};
+    }
+    return {
+      blob:item.file,
+      mime:item.file.type || 'application/octet-stream',
+      name:item.file.name,
+      ext:composerExtension(item.file),
+      width:0,
+      height:0,
+      kind:'file'
+    };
+  }
+  async function uploadComposerAttachments(items, postId){
+    const total = items.length;
+    let done = 0;
+    setComposerProgress(0, total, `Preparing ${total} attachment${total === 1 ? '' : 's'}…`);
+    const results = await Promise.allSettled(items.map(async item => {
+      const prepared = await prepareComposerUpload(item);
+      const path = `${currentUser.id}/${postId}/${composerId()}.${prepared.ext}`;
+      const {error} = await supabaseClient.storage.from(MEDIA_BUCKET).upload(path, prepared.blob, {
+        contentType:prepared.mime,
+        cacheControl:'31536000',
+        upsert:false
+      });
+      if (error) throw error;
+      done++;
+      setComposerProgress(done, total, `Uploaded ${done} of ${total}…`);
+      return {
+        kind:prepared.kind,
+        path,
+        url:supabaseClient.storage.from(MEDIA_BUCKET).getPublicUrl(path).data.publicUrl,
+        name:String(prepared.name || item.file.name).slice(0, 180),
+        mime:prepared.mime,
+        size:Number(prepared.blob.size) || 0,
+        width:prepared.width || 0,
+        height:prepared.height || 0
+      };
+    }));
+    const attachments = [];
+    const uploaded = [];
+    const failures = [];
+    results.forEach((result, index) => {
+      if (result.status === 'fulfilled'){
+        attachments[index] = result.value;
+        uploaded.push(result.value);
+      } else {
+        failures.push({item:items[index], error:result.reason});
+      }
+    });
+    return {attachments:attachments.filter(Boolean), uploaded, failures};
+  }
+  async function removeComposerObjects(uploaded){
+    const paths = (uploaded || []).map(item => item.path).filter(Boolean);
+    if (!paths.length) return;
+    try {
+      await supabaseClient.storage.from(MEDIA_BUCKET).remove(paths);
+    } catch (error){
+      console.warn('Could not clean up uploaded media:', error);
+    }
+  }
+  function composerUploadError(error){
+    const message = String((error && error.message) || error || '');
+    const lower = message.toLowerCase();
+    if (lower.includes('bucket') && lower.includes('not found')){
+      return 'Media storage is not set up yet. Run supabase-media-upgrade.sql in your Supabase SQL editor, then try again.';
+    }
+    if (lower.includes('row-level security') || lower.includes('new row violates') || lower.includes('permission denied')){
+      return 'Supabase blocked the upload. Run the media upgrade SQL and make sure you are signed in.';
+    }
+    if (lower.includes('attachments') || (lower.includes('column') && lower.includes('does not exist'))){
+      return 'The database needs the media upgrade. Run supabase-media-upgrade.sql, then try again.';
+    }
+    if (lower.includes('failed to fetch') || lower.includes('network')){
+      return 'Upload failed — check your connection and try again.';
+    }
+    if (lower.includes('payload too large') || lower.includes('file size') || lower.includes('exceeded')){
+      return 'That file is too large for the storage bucket. Try a smaller file.';
+    }
+    return message || 'Could not publish your post. Please try again.';
+  }
+  async function submitComposerPost(event){
+    if (event) event.preventDefault();
+    if (composerState.busy) return;
+    const title = composerTitleInput.value.trim();
+    const body = composerBodyInput.value.trim();
+    if (!title){
+      showComposerMessage('Give your post a title first.', 'error');
+      composerTitleInput.focus();
+      return;
+    }
+    if (!currentUser){
+      closeComposer(true);
+      openComposer('text');
+      return;
+    }
+    if (!currentProfile){
+      closeComposer(true);
+      openComposer('text');
+      return;
+    }
+    setComposerBusy(true);
+    hideComposerMessage();
+    composerProgress.hidden = false;
+    setComposerProgress(0, composerState.attachments.length || 1, composerState.attachments.length ? 'Preparing upload…' : 'Publishing…');
+    let uploaded = [];
+    try {
+      const postId = composerId();
+      let attachments = [];
+      if (composerState.attachments.length){
+        const result = await uploadComposerAttachments(composerState.attachments, postId);
+        uploaded = result.uploaded;
+        if (result.failures.length){
+          await removeComposerObjects(uploaded);
+          uploaded = [];
+          throw result.failures[0].error || new Error('One or more attachments could not be uploaded.');
+        }
+        attachments = result.attachments;
+      }
+      setComposerProgress(1, 1, attachments.length ? 'Saving your post…' : 'Publishing…');
+      const payload = {
+        id:postId,
+        author_id:currentUser.id,
+        title:title.slice(0, 240),
+        body:body.slice(0, 5000),
+        flair:FLARES[composerState.flair] ? composerState.flair : 'discussion',
+        thumb:'✨',
+        thumb_bg:'#ede9fe',
+        attachments
+      };
+      const {data, error} = await supabaseClient.from('museai_posts').insert(payload).select(POST_FIELDS).single();
+      if (error) throw error;
+      await recordActivity(true);
+      const post = mapRows([data], {[currentProfile.id]:currentProfile})[0];
+      state.posts.unshift(post);
+      state.filter = 'all';
+      state.sort = 'new';
+      state.profileView = null;
+      document.querySelectorAll('.sort-tab').forEach(tab => {
+        const active = tab.dataset.sort === 'new';
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', String(active));
+      });
+      renderChips();
+      renderFeed();
+      resetComposer();
+      closeComposer(true);
+      toast(attachments.length ? 'Posted with media ✦' : 'Posted to r/MuseAi ✦');
+      const feedElement = document.getElementById('feed');
+      if (feedElement) feedElement.scrollIntoView({behavior:'smooth', block:'start'});
+    } catch (error){
+      console.error('Post submission error:', error);
+      if (uploaded.length) await removeComposerObjects(uploaded);
+      showComposerMessage(composerUploadError(error), 'error');
+      composerProgress.hidden = true;
+    } finally {
+      setComposerBusy(false);
     }
   }
   function openLogin(signUp=false){
@@ -2271,6 +3189,11 @@ renderFeed();
       if(state.profileView && state.profileView.id===currentUser.id){state.profileView=currentProfile; renderProfilePanel();}
       refreshCommunityCounts();
       toast('Profile saved');
+      if(composerState.pendingIntent){
+        const intent=composerState.pendingIntent;
+        composerState.pendingIntent=null;
+        setTimeout(()=>openComposer(intent),80);
+      }
     }catch(error){
       console.error('Profile save error:',error);
       showProfileMessage(error.message || 'Could not save your profile. Check the Supabase profile permissions.');
@@ -2290,6 +3213,27 @@ renderFeed();
     if(error) throw error;
     return Object.fromEntries((data||[]).map(p=>[p.id,p]));
   }
+  function normalizeAttachments(value){
+    if (!Array.isArray(value)) return [];
+    return value.map(item => {
+      if (!item || typeof item !== 'object') return null;
+      const kind = item.kind === 'image' ? 'image' : (item.kind === 'file' ? 'file' : null);
+      const url = safeMediaUrl(item.url);
+      if (!kind || !url) return null;
+      const width = Number(item.width);
+      const height = Number(item.height);
+      return {
+        kind,
+        url,
+        path:String(item.path || ''),
+        name:String(item.name || (kind === 'image' ? 'image' : 'file')).slice(0, 180),
+        mime:String(item.mime || ''),
+        size:Number(item.size) || 0,
+        width:Number.isFinite(width) && width > 0 ? width : 0,
+        height:Number.isFinite(height) && height > 0 ? height : 0
+      };
+    }).filter(Boolean).slice(0, 10);
+  }
   function mapRows(rows,profiles,viewerVotes={}){
     const now=Date.now();
     return (rows||[]).map(row=>{
@@ -2302,7 +3246,8 @@ renderFeed();
         title:row.title||'Untitled post',body:row.body||'',ageHours:Math.max(0,Math.floor((now-Date.parse(createdAt))/3600000)),
         created_at:createdAt,score:Number.isFinite(score)?score:null,
         comments:Number.isFinite(comments)?comments:null,flair:row.flair||'discussion',
-        thumb:row.thumb||'✨',thumbBg:row.thumb_bg||'#ede9fe',myVote:Number(viewerVotes[row.id])||0
+        thumb:String(row.thumb||'✨').slice(0,16),thumbBg:/^#[0-9a-f]{3,8}$/i.test(String(row.thumb_bg||''))?row.thumb_bg:'#ede9fe',myVote:Number(viewerVotes[row.id])||0,
+        attachments:normalizeAttachments(row.attachments)
       };
     });
   }
@@ -2452,6 +3397,11 @@ renderFeed();
         await loadProfile(user);
         await loadCommunityPosts(true);
         await refreshCommunityCounts();
+        if(currentProfile && !profileRequired && composerState.pendingIntent){
+          const intent = composerState.pendingIntent;
+          composerState.pendingIntent = null;
+          setTimeout(() => openComposer(intent), 80);
+        }
       }catch(error){
         console.error('Member setup error:',error);
         toast('Signed in, but your profile could not load');
@@ -2459,39 +3409,96 @@ renderFeed();
     })();
     return activationPromise;
   }
-  async function submitCommunityPost(title){
-    if(!currentUser){openLogin(false);return;}
-    if(!currentProfile){openProfileEditor(true);return;}
-    createBtn.disabled=true; createBtn.textContent='Posting…';
-    try{
-      const payload={author_id:currentUser.id,title:title.slice(0,240),body:'',flair:'discussion',thumb:'✨',thumb_bg:'#ede9fe'};
-      const {data,error}=await supabaseClient.from('museai_posts').insert(payload).select(POST_FIELDS).single();
-      if(error) throw error;
-      await recordActivity(true);
-      const post=mapRows([data],{[currentProfile.id]:currentProfile})[0];
-      state.posts.unshift(post); state.filter='all'; state.sort='new'; state.profileView=null;
-      document.querySelectorAll('.sort-tab').forEach(tab=>{const active=tab.dataset.sort==='new';tab.classList.toggle('active',active);tab.setAttribute('aria-selected',String(active));});
-      createInput.value=''; createBtn.disabled=true;
-      renderChips(); renderFeed(); toast('Posted to r/MuseAi ✦');
-    }catch(error){
-      console.error('Post submission error:',error);
-      const message=(error.message||'').toLowerCase().includes('museai_posts')?'Run the included Supabase SQL setup to enable posts.':(error.message||'Could not publish your post.');
-      toast(message);
-    }finally{createBtn.textContent='Post';createBtn.disabled=createInput.value.trim().length===0;}
-  }
-
   window.museCommunity={
     get currentUser(){return currentUser;},
     get profile(){return currentProfile;},
     openProfile,
     openLogin:()=>openLogin(false),
+    openComposer,
     recordActivity,
     vote:votePost,
     loadComments:loadPostComments,
     addComment,
     supabase:supabaseClient
   };
-  window.addEventListener('muse:post-submit',event=>submitCommunityPost(event.detail && event.detail.title || ''));
+  window.addEventListener('muse:post-submit',event=>{
+    const detail=event.detail||{};
+    openComposer('text');
+    if(detail.title){
+      composerTitleInput.value=String(detail.title).slice(0,240);
+      updateComposerCounts();
+      updateComposerSubmit();
+    }
+  });
+
+  /* --- Composer events --- */
+  document.getElementById('composerOpen').addEventListener('click',()=>openComposer('text'));
+  createBtn.addEventListener('click',()=>openComposer('text'));
+  document.querySelectorAll('[data-composer-open]').forEach(button=>{
+    button.addEventListener('click',()=>openComposer(button.dataset.composerOpen));
+  });
+  composerClose.addEventListener('click',()=>closeComposer());
+  composerCancel.addEventListener('click',()=>closeComposer());
+  composerModal.addEventListener('click',event=>{if(event.target===composerModal)closeComposer();});
+  composerForm.addEventListener('submit',submitComposerPost);
+  composerTitleInput.addEventListener('input',()=>{updateComposerCounts();updateComposerSubmit();});
+  composerBodyInput.addEventListener('input',updateComposerCounts);
+  composerFlair.addEventListener('click',event=>{
+    const button=event.target.closest('[data-composer-flair]');
+    if(!button||composerState.busy)return;
+    composerState.flair=button.dataset.composerFlair;
+    renderComposerFlair();
+  });
+  composerAttachments.addEventListener('click',event=>{
+    const button=event.target.closest('[data-remove-attachment]');
+    if(!button||composerState.busy)return;
+    removeComposerAttachment(button.dataset.removeAttachment);
+  });
+  document.getElementById('pickImagesBtn').addEventListener('click',()=>composerImageInput.click());
+  document.getElementById('pickFilesBtn').addEventListener('click',()=>composerFileInput.click());
+  composerImageInput.addEventListener('change',()=>{
+    addComposerFiles(composerImageInput.files,'image');
+    composerImageInput.value='';
+  });
+  composerFileInput.addEventListener('change',()=>{
+    addComposerFiles(composerFileInput.files,'file');
+    composerFileInput.value='';
+  });
+  composerDropzone.addEventListener('click',event=>{
+    if(!event.target.closest('button'))composerFileInput.click();
+  });
+  composerDropzone.addEventListener('keydown',event=>{
+    if(event.target.closest('button'))return;
+    if(event.key==='Enter'||event.key===' '){event.preventDefault();composerFileInput.click();}
+  });
+  ['dragenter','dragover'].forEach(type=>composerDropzone.addEventListener(type,event=>{
+    event.preventDefault();event.stopPropagation();
+    if(!composerState.busy)composerDropzone.classList.add('dragover');
+  }));
+  ['dragleave','drop'].forEach(type=>composerDropzone.addEventListener(type,event=>{
+    event.preventDefault();event.stopPropagation();
+    composerDropzone.classList.remove('dragover');
+  }));
+  composerDropzone.addEventListener('drop',event=>{
+    if(event.dataTransfer&&event.dataTransfer.files)addComposerFiles(event.dataTransfer.files);
+  });
+  composerModal.addEventListener('dragover',event=>{
+    if(event.dataTransfer&&Array.from(event.dataTransfer.types||[]).includes('Files'))event.preventDefault();
+  });
+  composerModal.addEventListener('drop',event=>{
+    if(event.target.closest('#composerDropzone'))return;
+    if(event.dataTransfer&&event.dataTransfer.files&&event.dataTransfer.files.length){
+      event.preventDefault();addComposerFiles(event.dataTransfer.files);
+    }
+  });
+  composerModal.addEventListener('paste',event=>{
+    if(!composerModal.classList.contains('active'))return;
+    const files=event.clipboardData&&event.clipboardData.files;
+    if(files&&files.length){event.preventDefault();addComposerFiles(files);}
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&composerModal.classList.contains('active'))closeComposer();
+  });
 
   loginLink.addEventListener('click',event=>{event.preventDefault();openLogin(false);});
   signupBtn.addEventListener('click',event=>{event.preventDefault();openLogin(true);});

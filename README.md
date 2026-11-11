@@ -74,6 +74,19 @@ python3 -m http.server 8080
 
 For live community behavior, run [`supabase-setup.sql`](supabase-setup.sql) in the configured Supabase SQL editor first. The SQL expects an existing `public.profiles` table. Without Supabase setup, the visual pages still render, but live posts, profiles, votes, comments, presence, and counts will not be available.
 
+### Enable images and files
+
+Run [`supabase-media-upgrade.sql`](supabase-media-upgrade.sql) after `supabase-setup.sql`. It adds the `attachments` column to posts and creates the public `museai-media` storage bucket with per-user upload, update, and delete policies. Both scripts are safe to re-run.
+
+The composer then supports:
+
+- Up to **6 images** (JPEG, PNG, WebP, GIF, or AVIF). Large images are compressed in the browser to WebP before upload.
+- Up to **4 files** (PDF, DOCX, XLSX, PPTX, TXT, MD, CSV, JSON, or ZIP), with a **25 MB** limit per file.
+- Drag and drop, clipboard paste, per-file progress, and automatic cleanup if publishing fails.
+- Image galleries with a lightbox, plus downloadable file cards on both the feed and the post detail page.
+
+If the media SQL has not been run, publishing a post with attachments shows a clear upgrade message and removes any objects already uploaded.
+
 There is currently no automated test command. The bundle is plain HTML/CSS/JS and can be checked with a static server plus browser inspection.
 
 ## What is included
@@ -81,6 +94,7 @@ There is currently no automated test command. The bundle is plain HTML/CSS/JS an
 - Reddit-inspired community feed with Hot, New, Top, Rising, and flair filters.
 - Supabase email authentication and member profiles.
 - Durable community posts, comments, voting, presence, and live counts.
+- Image and file posts with browser-side compression, drag-and-drop, galleries, lightboxes, and downloads.
 - Symbol-based SVG favicon and reusable MuseAi identity marks.
 - Animated FedPromptly invite button beside login with a full open-source social-card modal.
 - Animated orange flow bars, aurora banner, mascot motion, promo glow, marquee motion, and reduced-motion fallbacks.
@@ -96,6 +110,7 @@ There is currently no automated test command. The bundle is plain HTML/CSS/JS an
 | Route | Purpose |
 | --- | --- |
 | [`index.html`](index.html) | Main community feed and live Supabase integration |
+| [`post.html`](post.html) | Full post view with image gallery and file downloads |
 | [`promotions.html`](promotions.html) | Visual promotion gallery and asset showcase |
 | [`support.html`](support.html) | Age-gated support and payment hub |
 | [`discord.html`](discord.html) | Discord server selector and gated NSFW access request |
@@ -105,6 +120,7 @@ There is currently no automated test command. The bundle is plain HTML/CSS/JS an
 | [`status.html`](status.html) | Static status page surface |
 | [`404.html`](404.html) | Static-hosting fallback page |
 | [`supabase-setup.sql`](supabase-setup.sql) | Database schema, RLS policies, and RPC functions |
+| [`supabase-media-upgrade.sql`](supabase-media-upgrade.sql) | Post attachments column and media storage bucket policies |
 
 ## Visual asset gallery
 
@@ -154,6 +170,8 @@ Run [`supabase-setup.sql`](supabase-setup.sql) in Supabase before expecting the 
 - Comment creation.
 - Public post and comment reads.
 
+For image and file posts, also run [`supabase-media-upgrade.sql`](supabase-media-upgrade.sql) to add the `attachments` column and create the public `museai-media` storage bucket. The bucket allows public reads and limits writes to each signed-in member's own folder.
+
 Review the existing `public.profiles` schema and production RLS permissions before launch.
 
 ## Support and restricted-access notes
@@ -168,6 +186,7 @@ The support age screen and private-community eligibility flow are lightweight cl
 - No automated test suite is included.
 - No live demo URL is currently configured.
 - The feed needs the included Supabase SQL setup and a compatible existing profiles table for live database behavior.
+- Media posts need the separate `supabase-media-upgrade.sql` migration and the `museai-media` storage bucket.
 - External payment, Discord, social, and media links depend on third-party availability.
 
 ## License
